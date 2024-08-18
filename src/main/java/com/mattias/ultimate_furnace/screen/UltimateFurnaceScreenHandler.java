@@ -22,16 +22,11 @@ public class UltimateFurnaceScreenHandler extends ScreenHandler {
 	private final PropertyDelegate propertyDelegate;
 	private final ScreenHandlerContext context;
 
-	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
+	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, UltimateFurnaceBlockEntity blockEntity, PropertyDelegate propertyDelegate) {
 		super(ModScreenHandlers.ULTIMATE_FURNACE_SCREEN_HANDLER, syncId);
-
-		// Read BlockPos and other data from the PacketByteBuf
-		BlockPos pos = buf.readBlockPos();
-		this.context = ScreenHandlerContext.create(playerInventory.player.getWorld(), pos);
-		this.inventory = new SimpleInventory(3); // Adjust size if necessary
-
-		this.propertyDelegate = new ArrayPropertyDelegate(4);
-		this.addProperties(propertyDelegate);
+		this.inventory = blockEntity;
+		this.propertyDelegate = propertyDelegate;
+		this.context = ScreenHandlerContext.create(playerInventory.player.getWorld(), blockEntity.getPos());
 
 		// Add slots to the screen handler
 		this.addSlot(new Slot(inventory, 0, 56, 17)); // Input slot
@@ -48,7 +43,10 @@ public class UltimateFurnaceScreenHandler extends ScreenHandler {
 		for (int i = 0; i < 9; i++) {
 			this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 		}
+
+		this.addProperties(propertyDelegate);
 	}
+
 
 
 	@Override
@@ -107,4 +105,9 @@ public class UltimateFurnaceScreenHandler extends ScreenHandler {
 	public void onContentChanged(Inventory inventory) {
 		super.onContentChanged(inventory);
 	}
+
+	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
+		this(syncId, playerInventory, (UltimateFurnaceBlockEntity) playerInventory.player.world.getBlockEntity(buf.readBlockPos()), new ArrayPropertyDelegate(4));
+	}
+
 }

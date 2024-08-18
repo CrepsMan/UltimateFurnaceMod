@@ -164,15 +164,15 @@ public class UltimateFurnaceBlockEntity extends BlockEntity implements Implement
 		this.currentNightBurnTime = nbt.getInt("CurrentNightBurnTime");
 	}
 
-	@Nullable
-	@Override
-	public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-		return new UltimateFurnaceScreenHandler(syncId, inv, new PacketByteBuf(Unpooled.buffer()));
-	}
-
-
 	@Override
 	public Text getDisplayName() {
 		return Text.translatable("container.ultimate_furnace");
 	}
+
+	@Nullable
+	@Override
+	public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+		return new UltimateFurnaceScreenHandler(syncId, inv, this, this.propertyDelegate);
+	}
+
 }
