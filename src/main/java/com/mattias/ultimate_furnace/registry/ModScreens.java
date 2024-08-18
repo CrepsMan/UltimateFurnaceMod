@@ -12,6 +12,7 @@ public class ModScreens {
 	public static void registerClientScreens() {
 		UltimateFurnaceMod.LOGGER.info("Registering client screens for " + UltimateFurnaceMod.MOD_ID);
 		ScreenRegistry.register(ModScreenHandlers.ULTIMATE_FURNACE_SCREEN_HANDLER, UltimateFurnaceScreen::new);
+
 	}
 
 }

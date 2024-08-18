@@ -1,6 +1,7 @@
 package com.mattias.ultimate_furnace.registry;
 
 import com.mattias.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntity;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.entity.BlockEntityType;
@@ -13,8 +14,9 @@ public class ModBlockEntities {
 		Registry.register(
 			Registry.BLOCK_ENTITY_TYPE,
 			new Identifier(UltimateFurnaceMod.MOD_ID, "ultimate_furnace"),
-			BlockEntityType.Builder.create(UltimateFurnaceBlockEntity::new, ModBlocks.ULTIMATE_FURNACE).build(null)
+			FabricBlockEntityTypeBuilder.create(UltimateFurnaceBlockEntity::new, ModBlocks.ULTIMATE_FURNACE).build(null)
 		);
+
 
 	public static void registerBlockEntities() {
 		UltimateFurnaceMod.LOGGER.info("Registering block entities for " + UltimateFurnaceMod.MOD_ID);
