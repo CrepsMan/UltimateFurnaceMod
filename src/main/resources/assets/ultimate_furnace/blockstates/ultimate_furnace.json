@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north,lit=false,day_mode=true": { "model": "ultimate_furnace:block/ultimate_furnace_day" },
+    "facing=south,lit=false,day_mode=true": { "model": "ultimate_furnace:block/ultimate_furnace_day", "y": 180 },
+    "facing=west,lit=false,day_mode=true": { "model": "ultimate_furnace:block/ultimate_furnace_day", "y": 270 },
+    "facing=east,lit=false,day_mode=true": { "model": "ultimate_furnace:block/ultimate_furnace_day", "y": 90 },
+
+    "facing=north,lit=true,day_mode=true": { "model": "ultimate_furnace:block/ultimate_furnace_on_day" },
+    "facing=south,lit=true,day_mode=true": { "model": "ultimate_furnace:block/ultimate_furnace_on_day", "y": 180 },
+    "facing=west,lit=true,day_mode=true": { "model": "ultimate_furnace:block/ultimate_furnace_on_day", "y": 270 },
+    "facing=east,lit=true,day_mode=true": { "model": "ultimate_furnace:block/ultimate_furnace_on_day", "y": 90 },
+
+    "facing=north,lit=false,day_mode=false": { "model": "ultimate_furnace:block/ultimate_furnace_night" },
+    "facing=south,lit=false,day_mode=false": { "model": "ultimate_furnace:block/ultimate_furnace_night", "y": 180 },
+    "facing=west,lit=false,day_mode=false": { "model": "ultimate_furnace:block/ultimate_furnace_night", "y": 270 },
+    "facing=east,lit=false,day_mode=false": { "model": "ultimate_furnace:block/ultimate_furnace_night", "y": 90 },
+
+    "facing=north,lit=true,day_mode=false": { "model": "ultimate_furnace:block/ultimate_furnace_on_night" },
+    "facing=south,lit=true,day_mode=false": { "model": "ultimate_furnace:block/ultimate_furnace_on_night", "y": 180 },
+    "facing=west,lit=true,day_mode=false": { "model": "ultimate_furnace:block/ultimate_furnace_on_night", "y": 270 },
+    "facing=east,lit=true,day_mode=false": { "model": "ultimate_furnace:block/ultimate_furnace_on_night", "y": 90 }
+  }
+}
