@@ -23,7 +23,7 @@ public class ModBlocks {
 		return Registry.register(Registry.ITEM, new Identifier(UltimateFurnaceMod.MOD_ID, name), new BlockItem(block, new FabricItemSettings()));
 	}
 
-	public static void registerModBlock() {
-		UltimateFurnaceMod.LOGGER.info("Registering blocks for" + UltimateFurnaceMod.MOD_ID);
+	public static void registerModBlocks() {
+		UltimateFurnaceMod.LOGGER.info("Registering blocks for " + UltimateFurnaceMod.MOD_ID);
 	}
 }

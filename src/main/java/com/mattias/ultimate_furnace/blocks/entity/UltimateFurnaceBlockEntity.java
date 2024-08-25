@@ -1,4 +1,4 @@
-package com.mattias.ultimate_furnace.blocks.entity;
+/*package com.mattias.ultimate_furnace.blocks.entity;
 
 import com.mattias.ultimate_furnace.UltimateFurnaceMod;
 import com.mattias.ultimate_furnace.blocks.UltimateFurnaceBlock;
@@ -176,3 +176,4 @@ public class UltimateFurnaceBlockEntity extends BlockEntity implements Implement
 	}
 
 }
+/*/

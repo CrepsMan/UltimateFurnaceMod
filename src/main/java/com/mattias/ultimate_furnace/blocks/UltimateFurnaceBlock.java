@@ -1,4 +1,4 @@
-package com.mattias.ultimate_furnace.blocks;
+/*package com.mattias.ultimate_furnace.blocks;
 
 import com.mattias.ultimate_furnace.UltimateFurnaceMod;
 import com.mattias.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntity;
@@ -45,19 +45,14 @@ public class UltimateFurnaceBlock extends Block implements BlockEntityProvider {
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (world.isClient) {
-			return ActionResult.SUCCESS;
+		if (!world.isClient) {
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof UltimateFurnaceBlockEntity) {
+				player.openHandledScreen((NamedScreenHandlerFactory) blockEntity);
+			}
 		}
-
-		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if (blockEntity instanceof NamedScreenHandlerFactory screenHandlerFactory) {
-			player.openHandledScreen(screenHandlerFactory);
-			return ActionResult.CONSUME;
-		}
-
-		return ActionResult.PASS;
+		return ActionResult.SUCCESS;
 	}
-
 
 	@Override
 	public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
@@ -121,3 +116,4 @@ public class UltimateFurnaceBlock extends Block implements BlockEntityProvider {
 		return state.with(UltimateFurnaceBlock.DAY_MODE, isDay);
 	}
 }
+/*/

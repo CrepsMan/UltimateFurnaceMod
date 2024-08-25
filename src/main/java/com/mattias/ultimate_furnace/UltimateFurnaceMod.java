@@ -12,7 +12,7 @@ public class UltimateFurnaceMod implements ModInitializer {
 	public void onInitialize() {
 
 		LOGGER.info("Initializing Ultimate Furnace Mod");
-		ModBlocks.registerModBlock();
+		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModScreenHandlers.registerScreenHandlers();
 		LOGGER.info("Ultimate Furnace Mod Initialization Complete");

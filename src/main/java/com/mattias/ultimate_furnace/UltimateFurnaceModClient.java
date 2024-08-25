@@ -8,7 +8,6 @@ public class UltimateFurnaceModClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ModScreens.registerClientScreens();
-		ModScreenHandlers.registerScreenHandlers();
+		ScreenRegistry.register(ModScreenHandlers.ULTIMATE_FURNACE_SCREEN_HANDLER_GUM, UltimateFurnaceScreenGum::new);
 	}
 }
