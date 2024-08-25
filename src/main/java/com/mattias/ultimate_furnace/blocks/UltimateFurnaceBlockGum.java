@@ -2,8 +2,10 @@ package com.mattias.ultimate_furnace.blocks;
 
 import com.mattias.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
 import com.mattias.ultimate_furnace.registry.ModBlockEntities;
+import com.mattias.ultimate_furnace.util.ModProperties;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -16,19 +18,34 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.world.TickPriority;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class UltimateFurnaceBlockGum extends AbstractFurnaceBlock {
+	public static final BooleanProperty DAY_MODE;
+
 	public UltimateFurnaceBlockGum(AbstractBlock.Settings settings) {
 		super(settings);
+		this.setDefaultState((BlockState)((BlockState)(this.stateManager.getDefaultState())
+			.with(FACING, Direction.NORTH))
+			.with(LIT, false)
+			.with(DAY_MODE, false)
+		);
 	}
 
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
 		return new UltimateFurnaceBlockEntityGum(pos, state);
+	}
+
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		builder.add(LIT, DAY_MODE, FACING);
 	}
 
 	@Nullable
@@ -43,6 +60,41 @@ public class UltimateFurnaceBlockGum extends AbstractFurnaceBlock {
 			player.incrementStat(Stats.INTERACT_WITH_FURNACE);
 		}
 
+	}
+
+	@Override
+	public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+		super.onBlockAdded(state, world, pos, oldState, notify);
+		if (!world.isClient) {
+			updateDayMode(world, state, pos);
+		}
+	}
+	private void updateDayMode(World world, BlockState state, BlockPos pos) {
+		boolean isDay = world.getTimeOfDay() % 24000 < 12000;
+
+		if (state.get(DAY_MODE) != isDay) {
+			world.setBlockState(pos, state.with(DAY_MODE, isDay), 3);
+		}
+
+		scheduleNextTick(world, pos);
+	}
+
+	@Override
+	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
+		boolean isDay = world.getTimeOfDay() % 24000 < 12000;
+
+		if (state.get(DAY_MODE) != isDay) {
+			world.setBlockState(pos, state.with(DAY_MODE, isDay), 3);
+		}
+
+		scheduleNextTick(world, pos);
+	}
+
+
+	private void scheduleNextTick(World world, BlockPos pos) {
+		if (!world.isClient) {
+			world.scheduleBlockTick(pos, this, 200, TickPriority.NORMAL);
+		}
 	}
 
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, RandomGenerator random) {
@@ -64,5 +116,9 @@ public class UltimateFurnaceBlockGum extends AbstractFurnaceBlock {
 			world.addParticle(ParticleTypes.SMOKE, d + i, e + j, f + k, 0.0, 0.0, 0.0);
 			world.addParticle(ParticleTypes.FLAME, d + i, e + j, f + k, 0.0, 0.0, 0.0);
 		}
+	}
+
+	static {
+		DAY_MODE = ModProperties.DAY_MODE;
 	}
 }
