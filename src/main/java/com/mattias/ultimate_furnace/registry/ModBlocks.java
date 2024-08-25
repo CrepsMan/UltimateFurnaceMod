@@ -1,6 +1,6 @@
 package com.mattias.ultimate_furnace.registry;
 
-import com.mattias.ultimate_furnace.blocks.UltimateFurnaceBlock;
+import com.mattias.ultimate_furnace.blocks.UltimateFurnaceBlockGum;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -10,9 +10,10 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import com.mattias.ultimate_furnace.UltimateFurnaceMod;
+import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 
 public class ModBlocks {
-	public static final Block ULTIMATE_FURNACE = registerBlock("ultimate_furnace", new UltimateFurnaceBlock(FabricBlockSettings.of(Material.STONE).strength(4.0f)));
+	public static final Block ULTIMATE_FURNACE_GUM = registerBlock("ultimate_furnace_gum", new UltimateFurnaceBlockGum(QuiltBlockSettings.of(Material.STONE).strength(4.0f)));
 
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
