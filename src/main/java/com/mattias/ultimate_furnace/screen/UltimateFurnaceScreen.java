@@ -1,4 +1,4 @@
-package com.mattias.ultimate_furnace.screen;
+/*package com.mattias.ultimate_furnace.screen;
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -11,11 +11,12 @@ public class UltimateFurnaceScreen extends HandledScreen<UltimateFurnaceScreenHa
 
 	public UltimateFurnaceScreen(UltimateFurnaceScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
+		this.backgroundWidth = 176; // Set background width
+		this.backgroundHeight = 166; // Set background height
 	}
 
 	@Override
 	public void renderBackground(MatrixStack matrices) {
-		// Default behavior is fine unless you need something custom
 		super.renderBackground(matrices);
 	}
 
@@ -39,7 +40,6 @@ public class UltimateFurnaceScreen extends HandledScreen<UltimateFurnaceScreenHa
 		}
 	}
 
-
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
@@ -47,3 +47,4 @@ public class UltimateFurnaceScreen extends HandledScreen<UltimateFurnaceScreenHa
 		this.drawMouseoverTooltip(matrices, mouseX, mouseY);
 	}
 }
+/*/

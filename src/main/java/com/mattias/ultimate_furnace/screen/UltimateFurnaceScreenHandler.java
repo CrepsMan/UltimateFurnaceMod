@@ -1,32 +1,26 @@
-package com.mattias.ultimate_furnace.screen;
+/*package com.mattias.ultimate_furnace.screen;
 
 import com.mattias.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntity;
 import com.mattias.ultimate_furnace.registry.ModScreenHandlers;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class UltimateFurnaceScreenHandler extends ScreenHandler {
 	private final Inventory inventory;
 	private final PropertyDelegate propertyDelegate;
-	private final ScreenHandlerContext context;
 
 	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, UltimateFurnaceBlockEntity blockEntity, PropertyDelegate propertyDelegate) {
 		super(ModScreenHandlers.ULTIMATE_FURNACE_SCREEN_HANDLER, syncId);
 		this.inventory = blockEntity;
 		this.propertyDelegate = propertyDelegate;
-		this.context = ScreenHandlerContext.create(playerInventory.player.getWorld(), blockEntity.getPos());
 
 		// Add slots to the screen handler
 		this.addSlot(new Slot(inventory, 0, 56, 17)); // Input slot
@@ -46,8 +40,6 @@ public class UltimateFurnaceScreenHandler extends ScreenHandler {
 
 		this.addProperties(propertyDelegate);
 	}
-
-
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
@@ -109,5 +101,5 @@ public class UltimateFurnaceScreenHandler extends ScreenHandler {
 	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
 		this(syncId, playerInventory, (UltimateFurnaceBlockEntity) playerInventory.player.world.getBlockEntity(buf.readBlockPos()), new ArrayPropertyDelegate(4));
 	}
-
 }
+/*/
