@@ -11,6 +11,7 @@ public class UltimateFurnaceMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
+
 		LOGGER.info("Initializing Ultimate Furnace Mod");
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
