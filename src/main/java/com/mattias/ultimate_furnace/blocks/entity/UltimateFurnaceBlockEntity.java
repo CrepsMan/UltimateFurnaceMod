@@ -35,7 +35,7 @@ public class UltimateFurnaceBlockEntity extends BlockEntity implements Implement
 	private int cookTime = 0;
 	private int cookTimeTotal = 200; // Base cook time
 	private boolean dayPowered = false;
-	private int nightBurnTime = 2000; // Base burn time at night
+	private int nightBurnTime = 6000; // Base burn time at night
 	private int currentNightBurnTime = 0;
 	private int smeltCount = 0; // Declare smeltCount
 	private int upgradeLevel = 0; // Declare upgradeLevel

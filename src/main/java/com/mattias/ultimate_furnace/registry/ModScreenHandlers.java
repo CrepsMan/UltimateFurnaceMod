@@ -1,7 +1,6 @@
 package com.mattias.ultimate_furnace.registry;
 
 import com.mattias.ultimate_furnace.screen.UltimateFurnaceScreenHandlerGum;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
