@@ -1,4 +1,4 @@
-package com.mattias.ultimate_furnace.util;
+package com.CrepsMan.ultimate_furnace.util;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;

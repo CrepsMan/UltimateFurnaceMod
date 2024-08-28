@@ -1,10 +1,10 @@
-package com.mattias.ultimate_furnace.registry;
+package com.CrepsMan.ultimate_furnace.registry;
 
-import com.mattias.ultimate_furnace.screen.UltimateFurnaceScreenHandlerGum;
+import com.CrepsMan.ultimate_furnace.screen.UltimateFurnaceScreenHandlerGum;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import com.mattias.ultimate_furnace.UltimateFurnaceMod;
+import com.CrepsMan.ultimate_furnace.UltimateFurnaceMod;
 
 public class ModScreenHandlers {
 

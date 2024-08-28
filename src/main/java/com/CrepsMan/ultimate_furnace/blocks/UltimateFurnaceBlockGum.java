@@ -1,8 +1,8 @@
-package com.mattias.ultimate_furnace.blocks;
+package com.CrepsMan.ultimate_furnace.blocks;
 
-import com.mattias.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
-import com.mattias.ultimate_furnace.registry.ModBlockEntities;
-import com.mattias.ultimate_furnace.util.ModProperties;
+import com.CrepsMan.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
+import com.CrepsMan.ultimate_furnace.registry.ModBlockEntities;
+import com.CrepsMan.ultimate_furnace.util.ModProperties;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
@@ -10,7 +10,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.NamedScreenHandlerFactory;

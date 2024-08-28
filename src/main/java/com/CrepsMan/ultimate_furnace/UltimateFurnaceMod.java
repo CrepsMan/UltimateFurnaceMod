@@ -1,6 +1,6 @@
-package com.mattias.ultimate_furnace;
+package com.CrepsMan.ultimate_furnace;
 
-import com.mattias.ultimate_furnace.registry.*;
+import com.CrepsMan.ultimate_furnace.registry.*;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

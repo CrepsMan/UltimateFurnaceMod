@@ -1,11 +1,10 @@
-package com.mattias.ultimate_furnace.screen;
+package com.CrepsMan.ultimate_furnace.screen;
 
-import com.mattias.ultimate_furnace.UltimateFurnaceMod;
+import com.CrepsMan.ultimate_furnace.UltimateFurnaceMod;
 import net.minecraft.client.gui.screen.ingame.AbstractFurnaceScreen;
 import net.minecraft.client.gui.screen.recipebook.FurnaceRecipeBookScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.FurnaceScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
