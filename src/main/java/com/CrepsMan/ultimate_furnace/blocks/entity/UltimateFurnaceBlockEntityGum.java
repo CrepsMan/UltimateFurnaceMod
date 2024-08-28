@@ -9,6 +9,7 @@ import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmeltingRecipe;
 import net.minecraft.screen.PropertyDelegate;
@@ -20,6 +21,8 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
+
+	private final PropertyDelegate propertyDelegate;
 	private int cookTime = 0;
 	private int cookTimeTotal = 300; // Base cook time
 	private int nightBurnTime = 6144; // Base burn time at night
@@ -27,21 +30,61 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 	private int smeltCount = 0;
 
 	// Upgrade thresholds
-	private static final int[] UPGRADE_THRESHOLDS = {300, 650, 1000}; // Example thresholds
-	private static final int[] UPGRADE_COOK_TIME = {200, 150, 100}; // Cook time for each upgrade
-	private static final int[] UPGRADE_NIGHT_BURN_TIME = {6144, 8192, 10240}; // Night burn time for each upgrade
+	private static final int[] UPGRADE_THRESHOLDS = {300, 650, 1200, 5000, 15000}; // Example thresholds
+	private static final int[] UPGRADE_COOK_TIME = {3, 3, 100, 50, 1}; // Cook time for each upgrade
+	private static final int[] UPGRADE_NIGHT_BURN_TIME = {6144, 8192, 10240, 10240, 20480}; // Night burn time for each upgrade
 
 	public UltimateFurnaceBlockEntityGum(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY_GUM, pos, state, RecipeType.SMELTING);
 
-		// Instead of reassigning propertyDelegate, configure it directly using the existing field
-		this.propertyDelegate.set(0, cookTime);
-		this.propertyDelegate.set(1, cookTimeTotal);
-		this.propertyDelegate.set(2, nightBurnTime);
-		this.propertyDelegate.set(3, currentNightBurnTime);
+		this.propertyDelegate = new PropertyDelegate() {
+			@Override
+			public int get(int index) {
+				switch (index) {
+					case 0:
+						return UltimateFurnaceBlockEntityGum.this.currentNightBurnTime;
+					case 1:
+						return UltimateFurnaceBlockEntityGum.this.nightBurnTime;
+					case 2:
+						return UltimateFurnaceBlockEntityGum.this.cookTime;
+					case 3:
+						return UltimateFurnaceBlockEntityGum.this.cookTimeTotal;
+					case 4:
+						return UltimateFurnaceBlockEntityGum.this.smeltCount;
+					default:
+						return 0;
+				}
+			}
+
+			@Override
+			public void set(int index, int value) {
+				switch (index) {
+					case 0:
+						UltimateFurnaceBlockEntityGum.this.currentNightBurnTime = value;
+						break;
+					case 1:
+						UltimateFurnaceBlockEntityGum.this.nightBurnTime = value;
+						break;
+					case 2:
+						UltimateFurnaceBlockEntityGum.this.cookTime = value;
+						break;
+					case 3:
+						UltimateFurnaceBlockEntityGum.this.cookTimeTotal = value;
+						break;
+					case 4:
+						UltimateFurnaceBlockEntityGum.this.smeltCount = value;
+						break;
+				}
+			}
+
+			@Override
+			public int size() {
+				return 5;
+			}
+		};
 	}
 
-	public static void tick(World world, BlockPos pos, BlockState state, UltimateFurnaceBlockEntityGum entity) {
+		public static void tick(World world, BlockPos pos, BlockState state, UltimateFurnaceBlockEntityGum entity) {
 		if (world.isClient) return;
 
 		UltimateFurnaceMod.LOGGER.debug("UltimateFurnaceBlockEntity: Ticking at " + pos);
@@ -109,6 +152,20 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 
 	public void incrementSmeltCount() {
 		this.smeltCount++;
+	}
+
+	@Override
+	public void writeNbt(NbtCompound nbt) {
+		super.writeNbt(nbt);
+		nbt.putInt("SmeltCount", this.smeltCount);
+		// Save other data
+	}
+
+	@Override
+	public void readNbt(NbtCompound nbt) {
+		super.readNbt(nbt);
+		this.smeltCount = nbt.getInt("SmeltCount");
+		// Load other data
 	}
 
 	@Override
