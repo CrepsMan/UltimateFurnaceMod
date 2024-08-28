@@ -1,9 +1,9 @@
-package com.mattias.ultimate_furnace.blocks.entity;
+package com.CrepsMan.ultimate_furnace.blocks.entity;
 
-import com.mattias.ultimate_furnace.UltimateFurnaceMod;
-import com.mattias.ultimate_furnace.blocks.UltimateFurnaceBlockGum;
-import com.mattias.ultimate_furnace.registry.ModBlockEntities;
-import com.mattias.ultimate_furnace.screen.UltimateFurnaceScreenHandlerGum;
+import com.CrepsMan.ultimate_furnace.UltimateFurnaceMod;
+import com.CrepsMan.ultimate_furnace.blocks.UltimateFurnaceBlockGum;
+import com.CrepsMan.ultimate_furnace.registry.ModBlockEntities;
+import com.CrepsMan.ultimate_furnace.screen.UltimateFurnaceScreenHandlerGum;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
