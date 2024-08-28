@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.mattias.ultimate_furnace.mixin",
+  "package": "com.CrepsMan.ultimate_furnace.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [],

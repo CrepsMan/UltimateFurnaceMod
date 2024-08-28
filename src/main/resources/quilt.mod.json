@@ -1,7 +1,7 @@
 {
 	"schema_version": 1,
 	"quilt_loader": {
-		"group": "com.mattias",
+		"group": "com.CrepsMan",
 		"id": "ultimate_furnace",
 		"version": "1.0.0",
 		"metadata": {
@@ -12,18 +12,18 @@
 			},
 			"contact": {
 				"homepage": "https://example.com/",
-				"issues": "https://github.com/mattias/ultimatefurnace/issues",
-				"sources": "https://github.com/mattias/ultimatefurnace"
+				"issues": "https://github.com/CrepsMan/ultimatefurnace/issues",
+				"sources": "https://github.com/CrepsMan/ultimatefurnace"
 			},
 			"icon": "assets/ultimate_furnace/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"main": [
-				"com.mattias.ultimate_furnace.UltimateFurnaceMod"
+				"com.CrepsMan.ultimate_furnace.UltimateFurnaceMod"
 			],
 			"client": [
-				"com.mattias.ultimate_furnace.UltimateFurnaceModClient"
+				"com.CrepsMan.ultimate_furnace.UltimateFurnaceModClient"
 			]
 		},
 		"depends": [
