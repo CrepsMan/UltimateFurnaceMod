@@ -49,9 +49,11 @@ public class UltimateFurnaceBlockGum extends AbstractFurnaceBlock {
 	}
 
 	@Nullable
+	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return checkType(world, type, ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY_GUM);
+		return checkType(type, ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY_GUM, UltimateFurnaceBlockEntityGum::tick);
 	}
+
 
 	protected void openScreen(World world, BlockPos pos, PlayerEntity player) {
 		BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -69,7 +71,7 @@ public class UltimateFurnaceBlockGum extends AbstractFurnaceBlock {
 			updateDayMode(world, state, pos);
 		}
 	}
-	private void updateDayMode(World world, BlockState state, BlockPos pos) {
+	public void updateDayMode(World world, BlockState state, BlockPos pos) {
 		boolean isDay = world.getTimeOfDay() % 24000 < 12000;
 
 		if (state.get(DAY_MODE) != isDay) {
