@@ -31,7 +31,7 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 
 	// Upgrade thresholds
 	private static final int[] UPGRADE_THRESHOLDS = {300, 650, 1200, 5000, 15000}; // Example thresholds
-	private static final int[] UPGRADE_COOK_TIME = {3, 3, 100, 50, 1}; // Cook time for each upgrade
+	private static final int[] UPGRADE_COOK_TIME = {200, 150, 100, 50, 10}; // Cook time for each upgrade
 	private static final int[] UPGRADE_NIGHT_BURN_TIME = {6144, 8192, 10240, 10240, 20480}; // Night burn time for each upgrade
 
 	public UltimateFurnaceBlockEntityGum(BlockPos pos, BlockState state) {
