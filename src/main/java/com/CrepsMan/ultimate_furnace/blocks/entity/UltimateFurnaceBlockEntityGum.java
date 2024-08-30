@@ -31,7 +31,7 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 
 	// Upgrade thresholds
 	private static final int[] UPGRADE_THRESHOLDS = {300, 650, 1200, 5000, 15000}; // Example thresholds
-	private static final int[] UPGRADE_COOK_TIME = {200, 150, 100, 50, 10}; // Cook time for each upgrade
+	private static final int[] UPGRADE_COOK_TIME = {2, 150, 100, 50, 10}; // Cook time for each upgrade
 	private static final int[] UPGRADE_NIGHT_BURN_TIME = {6144, 8192, 10240, 10240, 20480}; // Night burn time for each upgrade
 
 	public UltimateFurnaceBlockEntityGum(BlockPos pos, BlockState state) {
@@ -92,21 +92,19 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 		boolean dirty = false;
 		boolean isDay = world.isDay();
 
-		// Handle day and night burn time logic
 		if (isDay) {
-			entity.currentNightBurnTime = entity.getNightBurnTime(); // Use upgraded night burn time
+			entity.currentNightBurnTime = entity.nightBurnTime; // Reset night burn time at day
 		} else if (entity.currentNightBurnTime > 0) {
 			entity.currentNightBurnTime--; // Decrease night burn time at night
 		}
 
 		ItemStack input = entity.getInputSlot();
 		if (!input.isEmpty()) {
-			// Check if the furnace should be smelting
 			if (entity.isBurning()) {
 				Optional<SmeltingRecipe> recipe = world.getRecipeManager().getFirstMatch(RecipeType.SMELTING, new SimpleInventory(input), world);
 				if (recipe.isPresent()) {
 					entity.cookTime++;
-					if (entity.cookTime >= entity.getCookTimeTotal()) {
+					if (entity.cookTime >= entity.cookTimeTotal) {
 						entity.smeltItem(recipe.get().getOutput().copy());
 						entity.cookTime = 0;
 						entity.incrementSmeltCount();
@@ -122,7 +120,6 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 			entity.cookTime = 0; // Reset cook time if no input
 		}
 
-		// Determine if the block should be marked as "lit"
 		boolean isBurning = entity.isBurning() && !input.isEmpty();
 		if (dirty || isBurning != state.get(UltimateFurnaceBlockGum.LIT)) {
 			state = state.with(UltimateFurnaceBlockGum.LIT, isBurning);
@@ -130,7 +127,6 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 			entity.markDirty();
 		}
 	}
-
 
 	private int getCookTimeTotal() {
 		int upgradeLevel = getUpgradeLevel();
@@ -168,23 +164,12 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 		super.writeNbt(nbt);
 		nbt.putInt("SmeltCount", this.smeltCount);
 
-		// Save the extra count in the output slot
-		ItemStack resultStack = this.inventory.get(2);
-		if (resultStack.hasNbt() && resultStack.getNbt().contains("ExtraCount")) {
-			nbt.putInt("ExtraOutputCount", resultStack.getNbt().getInt("ExtraCount"));
-		}
 	}
 
 	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 		this.smeltCount = nbt.getInt("SmeltCount");
-
-		// Load the extra count in the output slot
-		ItemStack resultStack = this.inventory.get(2);
-		if (resultStack.hasNbt() && nbt.contains("ExtraOutputCount")) {
-			resultStack.getOrCreateNbt().putInt("ExtraCount", nbt.getInt("ExtraOutputCount"));
-		}
 	}
 
 
@@ -199,31 +184,14 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 
 	public void smeltItem(ItemStack output) {
 		ItemStack resultStack = this.inventory.get(2); // Assuming inventory[2] is the output slot
-		int totalOutputCount = resultStack.getCount() + output.getCount();
-
 		if (resultStack.isEmpty()) {
-			ItemStack newStack = output.copy();
-			if (totalOutputCount > 64) {
-				newStack.setCount(64);
-				newStack.getOrCreateNbt().putInt("ExtraCount", totalOutputCount - 64);
-			}
-			this.inventory.set(2, newStack);
+			this.inventory.set(2, output);
 		} else if (resultStack.isItemEqual(output)) {
-			int newCount = resultStack.getCount() + output.getCount();
-			if (newCount <= 64) {
-				resultStack.increment(output.getCount());
-			} else {
-				resultStack.setCount(64);
-				resultStack.getOrCreateNbt().putInt("ExtraCount", newCount - 64);
-			}
+			resultStack.increment(output.getCount());
 		}
 		this.inventory.get(0).decrement(1); // Decrease input stack
 	}
 
-
-	protected boolean isBurning() {
-		return this.world != null && (this.world.isDay() || this.currentNightBurnTime > 0);
-	}
 
 	@Override
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {

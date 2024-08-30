@@ -8,6 +8,7 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractFurnaceScreenHandler;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.slot.Slot;
 
 public class UltimateFurnaceScreenHandlerGum extends AbstractFurnaceScreenHandler {
 	private final PropertyDelegate customPropertyDelegate;
@@ -37,6 +38,30 @@ public class UltimateFurnaceScreenHandlerGum extends AbstractFurnaceScreenHandle
 		super(ModScreenHandlers.ULTIMATE_FURNACE_SCREEN_HANDLER_GUM, RecipeType.SMELTING, RecipeBookCategory.FURNACE, syncId, playerInventory, inventory, propertyDelegate);
 		this.customPropertyDelegate = propertyDelegate;
 		this.addProperties(this.customPropertyDelegate);
+		// Clear existing slots and add only the necessary ones
+		this.slots.clear(); // Clear all existing slots
+
+		// Add the input slot
+		this.addSlot(new Slot(inventory, 0, 56, 17)); // Input slot
+
+		// Add the result slot
+		this.addSlot(new Slot(inventory, 2, 116, 35)); // Output slot
+
+		int playerInventoryStartX = 8;
+		int playerInventoryStartY = 84;
+		int hotbarStartY = 142;
+
+		// Add player inventory slots
+		for (int row = 0; row < 3; row++) {
+			for (int col = 0; col < 9; col++) {
+				this.addSlot(new Slot(playerInventory, col + row * 9 + 9, playerInventoryStartX + col * 18, playerInventoryStartY + row * 18));
+			}
+		}
+
+		// Add player hotbar slots
+		for (int col = 0; col < 9; col++) {
+			this.addSlot(new Slot(playerInventory, col, playerInventoryStartX + col * 18, hotbarStartY));
+		}
 	}
 
 	// Get the current cook progress for rendering the cook progress bar
