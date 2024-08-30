@@ -84,7 +84,7 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 		};
 	}
 
-		public static void tick(World world, BlockPos pos, BlockState state, UltimateFurnaceBlockEntityGum entity) {
+	public static void tick(World world, BlockPos pos, BlockState state, UltimateFurnaceBlockEntityGum entity) {
 		if (world.isClient) return;
 
 		UltimateFurnaceMod.LOGGER.debug("UltimateFurnaceBlockEntity: Ticking at " + pos);
@@ -101,7 +101,7 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 
 		ItemStack input = entity.getInputSlot();
 		if (!input.isEmpty()) {
-			// Check if the furnace should be burning
+			// Check if the furnace should be smelting
 			if (entity.isBurning()) {
 				Optional<SmeltingRecipe> recipe = world.getRecipeManager().getFirstMatch(RecipeType.SMELTING, new SimpleInventory(input), world);
 				if (recipe.isPresent()) {
@@ -131,10 +131,15 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 		}
 	}
 
+
 	private int getCookTimeTotal() {
-		int index = getUpgradeLevel();
-		return UPGRADE_COOK_TIME[index];
+		int upgradeLevel = getUpgradeLevel();
+		if (upgradeLevel == 0) {
+			return this.cookTimeTotal; // Base cook time before any upgrades
+		}
+		return UPGRADE_COOK_TIME[upgradeLevel - 1]; // Use upgrade cook time for levels 1 and above
 	}
+
 
 	private int getNightBurnTime() {
 		int index = getUpgradeLevel();
@@ -144,29 +149,44 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 	private int getUpgradeLevel() {
 		for (int i = UPGRADE_THRESHOLDS.length - 1; i >= 0; i--) {
 			if (smeltCount >= UPGRADE_THRESHOLDS[i]) {
-				return i;
+				return i + 1; // Returning i+1 to distinguish the base level as 0
 			}
 		}
-		return 0; // No upgrades
+		return 0; // Base level with no upgrades
 	}
+
 
 	public void incrementSmeltCount() {
 		this.smeltCount++;
+		UltimateFurnaceMod.LOGGER.info("Smelt Count: " + this.smeltCount + ", Upgrade Level: " + getUpgradeLevel());
+		markDirty();
 	}
+
 
 	@Override
 	public void writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
 		nbt.putInt("SmeltCount", this.smeltCount);
-		// Save other data
+
+		// Save the extra count in the output slot
+		ItemStack resultStack = this.inventory.get(2);
+		if (resultStack.hasNbt() && resultStack.getNbt().contains("ExtraCount")) {
+			nbt.putInt("ExtraOutputCount", resultStack.getNbt().getInt("ExtraCount"));
+		}
 	}
 
 	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 		this.smeltCount = nbt.getInt("SmeltCount");
-		// Load other data
+
+		// Load the extra count in the output slot
+		ItemStack resultStack = this.inventory.get(2);
+		if (resultStack.hasNbt() && nbt.contains("ExtraOutputCount")) {
+			resultStack.getOrCreateNbt().putInt("ExtraCount", nbt.getInt("ExtraOutputCount"));
+		}
 	}
+
 
 	@Override
 	protected Text getContainerName() {
@@ -179,13 +199,27 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 
 	public void smeltItem(ItemStack output) {
 		ItemStack resultStack = this.inventory.get(2); // Assuming inventory[2] is the output slot
+		int totalOutputCount = resultStack.getCount() + output.getCount();
+
 		if (resultStack.isEmpty()) {
-			this.inventory.set(2, output);
+			ItemStack newStack = output.copy();
+			if (totalOutputCount > 64) {
+				newStack.setCount(64);
+				newStack.getOrCreateNbt().putInt("ExtraCount", totalOutputCount - 64);
+			}
+			this.inventory.set(2, newStack);
 		} else if (resultStack.isItemEqual(output)) {
-			resultStack.increment(output.getCount());
+			int newCount = resultStack.getCount() + output.getCount();
+			if (newCount <= 64) {
+				resultStack.increment(output.getCount());
+			} else {
+				resultStack.setCount(64);
+				resultStack.getOrCreateNbt().putInt("ExtraCount", newCount - 64);
+			}
 		}
 		this.inventory.get(0).decrement(1); // Decrease input stack
 	}
+
 
 	protected boolean isBurning() {
 		return this.world != null && (this.world.isDay() || this.currentNightBurnTime > 0);
