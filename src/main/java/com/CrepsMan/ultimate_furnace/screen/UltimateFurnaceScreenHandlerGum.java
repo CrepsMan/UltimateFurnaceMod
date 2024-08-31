@@ -64,12 +64,19 @@ public class UltimateFurnaceScreenHandlerGum extends AbstractFurnaceScreenHandle
 		}
 	}
 
-	// Get the current cook progress for rendering the cook progress bar
 	public int getCookProgress() {
 		int cookTime = this.customPropertyDelegate.get(2);
 		int cookTimeTotal = this.customPropertyDelegate.get(3);
-		return cookTimeTotal != 0 && cookTime != 0 ? cookTime * 24 / cookTimeTotal : 0;
+
+		if (cookTimeTotal == 0) {
+			cookTimeTotal = 1; // Avoid division by zero
+		}
+
+		// Return progress based on the total cook time
+		return (int)((double) cookTime / cookTimeTotal * 24); // 24 is the width of the arrow progress indicator
 	}
+
+
 
 	// Get the current fuel progress for rendering the flame icon
 	public int getFuelProgress() {
