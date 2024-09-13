@@ -1,10 +1,10 @@
-package com.CrepsMan.ultimate_furnace.registry;
+package com.crepsman.ultimate_furnace.registry;
 
-import com.CrepsMan.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
+import com.crepsman.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import com.CrepsMan.ultimate_furnace.UltimateFurnaceMod;
+import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
 import org.quiltmc.qsl.block.entity.api.QuiltBlockEntityTypeBuilder;
 
 public class ModBlockEntities {
@@ -16,7 +16,5 @@ public class ModBlockEntities {
 		);
 
 	public static void registerBlockEntities() {
-		UltimateFurnaceMod.LOGGER.info("Registering block entities for " + UltimateFurnaceMod.MOD_ID);
-		UltimateFurnaceMod.LOGGER.debug("UltimateFurnaceBlockEntity registered with ID: ultimate_furnace_gum");
 	}
 }

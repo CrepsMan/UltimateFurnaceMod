@@ -1,8 +1,8 @@
-package com.CrepsMan.ultimate_furnace.blocks;
+package com.crepsman.ultimate_furnace.blocks;
 
-import com.CrepsMan.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
-import com.CrepsMan.ultimate_furnace.registry.ModBlockEntities;
-import com.CrepsMan.ultimate_furnace.util.ModProperties;
+import com.crepsman.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
+import com.crepsman.ultimate_furnace.registry.ModBlockEntities;
+import com.crepsman.ultimate_furnace.util.ModProperties;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;

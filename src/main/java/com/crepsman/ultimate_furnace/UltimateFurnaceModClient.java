@@ -1,7 +1,7 @@
-package com.CrepsMan.ultimate_furnace;
+package com.crepsman.ultimate_furnace;
 
-import com.CrepsMan.ultimate_furnace.registry.ModScreenHandlers;
-import com.CrepsMan.ultimate_furnace.screen.UltimateFurnaceScreenGum;
+import com.crepsman.ultimate_furnace.registry.ModScreenHandlers;
+import com.crepsman.ultimate_furnace.screen.UltimateFurnaceScreenGum;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 
