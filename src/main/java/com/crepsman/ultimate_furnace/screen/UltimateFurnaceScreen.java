@@ -8,10 +8,10 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class UltimateFurnaceScreenGum extends AbstractFurnaceScreen<UltimateFurnaceScreenHandlerGum> {
+public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnaceScreenHandler> {
 	private static final Identifier TEXTURE = new Identifier(UltimateFurnaceMod.MOD_ID, "textures/gui/container/ultimate_furnace.png");
 
-	public UltimateFurnaceScreenGum(UltimateFurnaceScreenHandlerGum handler, PlayerInventory inventory, Text title) {
+	public UltimateFurnaceScreen(UltimateFurnaceScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, new FurnaceRecipeBookScreen(), inventory, title, TEXTURE);
 	}
 

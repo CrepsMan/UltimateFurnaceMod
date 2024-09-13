@@ -1,6 +1,6 @@
 package com.crepsman.ultimate_furnace.blocks;
 
-import com.crepsman.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
+import com.crepsman.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntity;
 import com.crepsman.ultimate_furnace.registry.ModBlockEntities;
 import com.crepsman.ultimate_furnace.util.ModProperties;
 import net.minecraft.block.AbstractBlock;
@@ -26,10 +26,10 @@ import net.minecraft.world.TickPriority;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class UltimateFurnaceBlockGum extends AbstractFurnaceBlock {
+public class UltimateFurnaceBlock extends AbstractFurnaceBlock {
 	public static final BooleanProperty DAY_MODE;
 
-	public UltimateFurnaceBlockGum(AbstractBlock.Settings settings) {
+	public UltimateFurnaceBlock(AbstractBlock.Settings settings) {
 		super(settings);
 		this.setDefaultState((BlockState)((BlockState)(this.stateManager.getDefaultState())
 			.with(FACING, Direction.NORTH))
@@ -39,7 +39,7 @@ public class UltimateFurnaceBlockGum extends AbstractFurnaceBlock {
 	}
 
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new UltimateFurnaceBlockEntityGum(pos, state);
+		return new UltimateFurnaceBlockEntity(pos, state);
 	}
 
 	@Override
@@ -50,13 +50,13 @@ public class UltimateFurnaceBlockGum extends AbstractFurnaceBlock {
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return checkType(type, ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY_GUM, UltimateFurnaceBlockEntityGum::tick);
+		return checkType(type, ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY, UltimateFurnaceBlockEntity::tick);
 	}
 
 
 	protected void openScreen(World world, BlockPos pos, PlayerEntity player) {
 		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if (blockEntity instanceof UltimateFurnaceBlockEntityGum) {
+		if (blockEntity instanceof UltimateFurnaceBlockEntity) {
 			player.openHandledScreen((NamedScreenHandlerFactory)blockEntity);
 			player.incrementStat(Stats.INTERACT_WITH_FURNACE);
 		}

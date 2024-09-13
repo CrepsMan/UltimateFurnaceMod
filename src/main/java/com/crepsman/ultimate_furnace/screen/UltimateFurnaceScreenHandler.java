@@ -1,7 +1,6 @@
 package com.crepsman.ultimate_furnace.screen;
 
 import com.crepsman.ultimate_furnace.registry.ModScreenHandlers;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -11,14 +10,13 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractFurnaceScreenHandler;
 import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.slot.FurnaceOutputSlot;
 import net.minecraft.screen.slot.Slot;
 
-public class UltimateFurnaceScreenHandlerGum extends AbstractFurnaceScreenHandler {
+public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 	private final PropertyDelegate customPropertyDelegate;
 	private final Inventory inventory;
 
-	public UltimateFurnaceScreenHandlerGum(int syncId, PlayerInventory playerInventory) {
+	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory) {
 		this(syncId, playerInventory, new SimpleInventory(3), new PropertyDelegate() {
 			private final int[] data = new int[5];
 
@@ -39,8 +37,8 @@ public class UltimateFurnaceScreenHandlerGum extends AbstractFurnaceScreenHandle
 		});
 	}
 
-	public UltimateFurnaceScreenHandlerGum(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
-		super(ModScreenHandlers.ULTIMATE_FURNACE_SCREEN_HANDLER_GUM, RecipeType.SMELTING, RecipeBookCategory.FURNACE, syncId, playerInventory, inventory, propertyDelegate);
+	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+		super(ModScreenHandlers.ULTIMATE_FURNACE_SCREEN_HANDLER, RecipeType.SMELTING, RecipeBookCategory.FURNACE, syncId, playerInventory, inventory, propertyDelegate);
 		this.customPropertyDelegate = propertyDelegate;
 		this.addProperties(this.customPropertyDelegate);
 		// Clear existing slots and add only the necessary ones

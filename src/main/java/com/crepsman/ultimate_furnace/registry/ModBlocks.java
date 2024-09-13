@@ -1,6 +1,6 @@
 package com.crepsman.ultimate_furnace.registry;
 
-import com.crepsman.ultimate_furnace.blocks.UltimateFurnaceBlockGum;
+import com.crepsman.ultimate_furnace.blocks.UltimateFurnaceBlock;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -12,7 +12,7 @@ import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
 import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 
 public class ModBlocks {
-	public static final Block ULTIMATE_FURNACE_GUM = registerBlock("ultimate_furnace_gum", new UltimateFurnaceBlockGum(QuiltBlockSettings.of(Material.STONE).strength(4.0f)));
+	public static final Block ULTIMATE_FURNACE = registerBlock("ultimate_furnace", new UltimateFurnaceBlock(QuiltBlockSettings.of(Material.STONE).strength(4.0f)));
 
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);

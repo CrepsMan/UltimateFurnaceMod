@@ -1,9 +1,9 @@
 package com.crepsman.ultimate_furnace.blocks.entity;
 
 import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
-import com.crepsman.ultimate_furnace.blocks.UltimateFurnaceBlockGum;
+import com.crepsman.ultimate_furnace.blocks.UltimateFurnaceBlock;
 import com.crepsman.ultimate_furnace.registry.ModBlockEntities;
-import com.crepsman.ultimate_furnace.screen.UltimateFurnaceScreenHandlerGum;
+import com.crepsman.ultimate_furnace.screen.UltimateFurnaceScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
+public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 	private final PropertyDelegate propertyDelegate;
 	private int cookTime = 0;
@@ -34,23 +34,23 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 	private static final int[] UPGRADE_COOK_TIME = {250, 200, 150, 70, 15}; // Cook time for each upgrade
 	private static final int[] UPGRADE_NIGHT_BURN_TIME = {6144, 8192, 10240, 10240, 20480}; // Night burn time for each upgrade
 
-	public UltimateFurnaceBlockEntityGum(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY_GUM, pos, state, RecipeType.SMELTING);
+	public UltimateFurnaceBlockEntity(BlockPos pos, BlockState state) {
+		super(ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY, pos, state, RecipeType.SMELTING);
 
 		this.propertyDelegate = new PropertyDelegate() {
 			@Override
 			public int get(int index) {
 				switch (index) {
 					case 0:
-						return UltimateFurnaceBlockEntityGum.this.currentNightBurnTime;
+						return UltimateFurnaceBlockEntity.this.currentNightBurnTime;
 					case 1:
-						return UltimateFurnaceBlockEntityGum.this.nightBurnTime;
+						return UltimateFurnaceBlockEntity.this.nightBurnTime;
 					case 2:
-						return UltimateFurnaceBlockEntityGum.this.cookTime;
+						return UltimateFurnaceBlockEntity.this.cookTime;
 					case 3:
-						return UltimateFurnaceBlockEntityGum.this.cookTimeTotal;
+						return UltimateFurnaceBlockEntity.this.cookTimeTotal;
 					case 4:
-						return UltimateFurnaceBlockEntityGum.this.smeltCount;
+						return UltimateFurnaceBlockEntity.this.smeltCount;
 					default:
 						return 0;
 				}
@@ -60,19 +60,19 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 			public void set(int index, int value) {
 				switch (index) {
 					case 0:
-						UltimateFurnaceBlockEntityGum.this.currentNightBurnTime = value;
+						UltimateFurnaceBlockEntity.this.currentNightBurnTime = value;
 						break;
 					case 1:
-						UltimateFurnaceBlockEntityGum.this.nightBurnTime = value;
+						UltimateFurnaceBlockEntity.this.nightBurnTime = value;
 						break;
 					case 2:
-						UltimateFurnaceBlockEntityGum.this.cookTime = value;
+						UltimateFurnaceBlockEntity.this.cookTime = value;
 						break;
 					case 3:
-						UltimateFurnaceBlockEntityGum.this.cookTimeTotal = value;
+						UltimateFurnaceBlockEntity.this.cookTimeTotal = value;
 						break;
 					case 4:
-						UltimateFurnaceBlockEntityGum.this.smeltCount = value;
+						UltimateFurnaceBlockEntity.this.smeltCount = value;
 						break;
 				}
 			}
@@ -84,7 +84,7 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 		};
 	}
 
-	public static void tick(World world, BlockPos pos, BlockState state, UltimateFurnaceBlockEntityGum entity) {
+	public static void tick(World world, BlockPos pos, BlockState state, UltimateFurnaceBlockEntity entity) {
 		if (world.isClient) return;
 
 		UltimateFurnaceMod.LOGGER.debug("UltimateFurnaceBlockEntity: Ticking at " + pos);
@@ -130,8 +130,8 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 
 		// Determine if the block should be marked as "lit"
 		boolean isBurning = entity.isBurning() && !input.isEmpty();
-		if (dirty || isBurning != state.get(UltimateFurnaceBlockGum.LIT)) {
-			state = state.with(UltimateFurnaceBlockGum.LIT, isBurning);
+		if (dirty || isBurning != state.get(UltimateFurnaceBlock.LIT)) {
+			state = state.with(UltimateFurnaceBlock.LIT, isBurning);
 			world.setBlockState(pos, state, 3);
 			entity.markDirty();
 		}
@@ -220,6 +220,6 @@ public class UltimateFurnaceBlockEntityGum extends AbstractFurnaceBlockEntity {
 
 	@Override
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
-		return new UltimateFurnaceScreenHandlerGum(syncId, playerInventory, this, this.propertyDelegate);
+		return new UltimateFurnaceScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
 	}
 }
