@@ -1,6 +1,6 @@
-package com.CrepsMan.ultimate_furnace.screen;
+package com.crepsman.ultimate_furnace.screen;
 
-import com.CrepsMan.ultimate_furnace.UltimateFurnaceMod;
+import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
 import net.minecraft.client.gui.screen.ingame.AbstractFurnaceScreen;
 import net.minecraft.client.gui.screen.recipebook.FurnaceRecipeBookScreen;
 import net.minecraft.client.util.math.MatrixStack;

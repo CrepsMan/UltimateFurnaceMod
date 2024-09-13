@@ -1,9 +1,9 @@
 {
 	"schema_version": 1,
 	"quilt_loader": {
-		"group": "com.CrepsMan",
+		"group": "com.crepsman",
 		"id": "ultimate_furnace",
-		"version": "1.0.0",
+		"version": "1.0.1",
 		"metadata": {
 			"name": "Ultimate Furnace Mod",
 			"description": "A mod that adds an advanced furnace with solar power, and increasing speed and storage.",
@@ -20,10 +20,10 @@
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"main": [
-				"com.CrepsMan.ultimate_furnace.UltimateFurnaceMod"
+				"com.crepsman.ultimate_furnace.UltimateFurnaceMod"
 			],
 			"client": [
-				"com.CrepsMan.ultimate_furnace.UltimateFurnaceModClient"
+				"com.crepsman.ultimate_furnace.UltimateFurnaceModClient"
 			]
 		},
 		"depends": [

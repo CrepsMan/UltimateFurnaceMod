@@ -1,10 +1,10 @@
-package com.CrepsMan.ultimate_furnace.registry;
+package com.crepsman.ultimate_furnace.registry;
 
-import com.CrepsMan.ultimate_furnace.screen.UltimateFurnaceScreenHandlerGum;
+import com.crepsman.ultimate_furnace.screen.UltimateFurnaceScreenHandlerGum;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import com.CrepsMan.ultimate_furnace.UltimateFurnaceMod;
+import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
 
 public class ModScreenHandlers {
 
@@ -16,7 +16,6 @@ public class ModScreenHandlers {
 		);
 
 	public static void registerScreenHandlers() {
-		UltimateFurnaceMod.LOGGER.info("Registering screen handlers for " + UltimateFurnaceMod.MOD_ID);
-		UltimateFurnaceMod.LOGGER.debug("UltimateFurnaceScreenHandler registered with ID: ultimate_furnace");
+
 	}
 }
