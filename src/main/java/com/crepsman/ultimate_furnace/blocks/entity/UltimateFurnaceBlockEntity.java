@@ -162,7 +162,6 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 	public void incrementSmeltCount() {
 		this.smeltCount++;
-		UltimateFurnaceMod.LOGGER.info("Smelt Count: " + this.smeltCount + ", Upgrade Level: " + getUpgradeLevel());
 		markDirty();
 	}
 
