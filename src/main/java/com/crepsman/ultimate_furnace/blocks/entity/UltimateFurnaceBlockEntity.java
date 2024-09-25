@@ -100,7 +100,7 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		}
 
 		ItemStack input = entity.getInputSlot();
-		ItemStack output = entity.inventory.get(2); // Get the output slot
+		ItemStack output = entity.inventory.get(1); // Get the output slot
 
 		if (!input.isEmpty() && (output.isEmpty() || output.getCount() < 64)) {
 			// Check if the furnace should be smelting
@@ -182,7 +182,7 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 	@Override
 	protected Text getContainerName() {
-		return Text.translatable("container.ultimate_furnace.furnace_gum");
+		return Text.translatable("container.ultimate_furnace.ultimate_furnace");
 	}
 
 	public ItemStack getInputSlot() {
@@ -194,7 +194,7 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 		if (resultStack.isEmpty()) {
 			// If the output slot is empty, place the new stack directly
-			this.inventory.set(2, output.copy());
+			this.inventory.set(1, output.copy());
 			this.inventory.get(0).decrement(1); // Decrease input stack since the smelting is successful
 		} else if (resultStack.isItemEqual(output)) {
 			int newCount = resultStack.getCount() + output.getCount();
@@ -209,6 +209,11 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 				this.inventory.get(0).decrement(1); // Decrease input stack since the smelting is successful
 			}
 		}
+	}
+
+
+	public int getSmeltCount(){
+		return smeltCount;
 	}
 
 
