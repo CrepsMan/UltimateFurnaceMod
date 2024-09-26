@@ -17,7 +17,7 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 	private final Inventory inventory;
 
 	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory) {
-		this(syncId, playerInventory, new SimpleInventory(2), new PropertyDelegate() {
+		this(syncId, playerInventory, new SimpleInventory(3), new PropertyDelegate() {
 			private final int[] data = new int[5];
 
 			@Override
@@ -49,7 +49,7 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 		this.addSlot(new Slot(inventory, 0, 56, 17)); // Input slot
 
 		// Add the result slot
-		this.addSlot(new OutputSlot(inventory, 1, 116, 35)); // Output slot
+		this.addSlot(new OutputSlot(inventory, 2, 116, 35)); // Output slot
 
 		int playerInventoryStartX = 8;
 		int playerInventoryStartY = 84;
