@@ -12,7 +12,11 @@ import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
 import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 
 public class ModBlocks {
+
 	public static final Block ULTIMATE_FURNACE = registerBlock("ultimate_furnace", new UltimateFurnaceBlock(QuiltBlockSettings.of(Material.STONE).strength(4.0f)));
+
+
+
 
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
@@ -24,5 +28,7 @@ public class ModBlocks {
 	}
 
 	public static void registerModBlocks() {
+
 	}
+
 }

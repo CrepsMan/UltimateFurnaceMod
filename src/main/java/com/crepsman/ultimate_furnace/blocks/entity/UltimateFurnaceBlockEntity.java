@@ -25,14 +25,14 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 	private final PropertyDelegate propertyDelegate;
 	private int cookTime = 0;
 	private int cookTimeTotal = 300; // Base cook time
-	private int nightBurnTime = 6144; // Base burn time at night
+	private int nightBurnTime = 4096; // Base burn time at night
 	private int currentNightBurnTime = 0;
 	private int smeltCount = 0;
 
 	// Upgrade thresholds
 	private static final int[] UPGRADE_THRESHOLDS = {300, 650, 1200, 5000, 15000}; // Example thresholds
 	private static final int[] UPGRADE_COOK_TIME = {250, 200, 150, 70, 15}; // Cook time for each upgrade
-	private static final int[] UPGRADE_NIGHT_BURN_TIME = {6144, 8192, 10240, 10240, 20480}; // Night burn time for each upgrade
+	private static final int[] UPGRADE_NIGHT_BURN_TIME = {6144, 7168, 8192, 10240, 13188 }; // Night burn time for each upgrade
 
 	public UltimateFurnaceBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY, pos, state, RecipeType.SMELTING);
@@ -194,7 +194,7 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 		if (resultStack.isEmpty()) {
 			// If the output slot is empty, place the new stack directly
-			this.inventory.set(1, output.copy());
+			this.inventory.set(2, output.copy());
 			this.inventory.get(0).decrement(1); // Decrease input stack since the smelting is successful
 		} else if (resultStack.isItemEqual(output)) {
 			int newCount = resultStack.getCount() + output.getCount();
@@ -212,7 +212,14 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 	}
 
 
+	//returns the current smelt count
 	public int getSmeltCount(){
+		return smeltCount;
+	}
+
+	//sets the smelt count
+	public int setSmeltCount(int set){
+		this.propertyDelegate.set(4, set);
 		return smeltCount;
 	}
 
