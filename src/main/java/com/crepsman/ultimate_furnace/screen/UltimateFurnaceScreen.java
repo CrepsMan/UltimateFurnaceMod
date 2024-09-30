@@ -1,10 +1,12 @@
 package com.crepsman.ultimate_furnace.screen;
 
 import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.ingame.AbstractFurnaceScreen;
 import net.minecraft.client.gui.screen.recipebook.FurnaceRecipeBookScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -37,9 +39,15 @@ public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnace
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
 		super.drawForeground(matrices, mouseX, mouseY);
 
-		// Draw the smelt count slightly higher to avoid overlapping with inventory text
+		// Get the smelt count from the handler
 		int smeltCount = this.handler.getSmeltCount();
-		String smeltCountText = "Smelted: " + smeltCount;
+
+		// Check if the smelt count has reached the maximum threshold
+		String smeltCountText = smeltCount >= 15000 ? "Smelted: Max" : "Smelted: " + smeltCount;
+
+		// Draw the smelt count slightly higher to avoid overlapping with inventory text
 		this.textRenderer.draw(matrices, smeltCountText, 8, this.backgroundHeight - 104, 4210752); // Adjusted position
 	}
+
+
 }
