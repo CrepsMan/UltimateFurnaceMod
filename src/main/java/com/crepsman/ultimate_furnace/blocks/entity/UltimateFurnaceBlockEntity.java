@@ -40,6 +40,7 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		this.propertyDelegate = new PropertyDelegate() {
 			@Override
 			public int get(int index) {
+				UltimateFurnaceMod.LOGGER.debug("PropertyDelegate get() called with index: " + index);
 				switch (index) {
 					case 0:
 						return UltimateFurnaceBlockEntity.this.currentNightBurnTime;
@@ -52,9 +53,11 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 					case 4:
 						return UltimateFurnaceBlockEntity.this.smeltCount;
 					default:
+						UltimateFurnaceMod.LOGGER.error("Invalid PropertyDelegate index accessed: " + index);
 						return 0;
 				}
 			}
+
 
 			@Override
 			public void set(int index, int value) {
@@ -149,8 +152,16 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 	private int getNightBurnTime() {
 		int index = getUpgradeLevel();
+
+		// Ensure the index is within bounds
+		if (index < 0 || index >= UPGRADE_NIGHT_BURN_TIME.length) {
+			// Default to the base burn time or handle the error appropriately
+			return UPGRADE_NIGHT_BURN_TIME[0];  // or some other default value
+		}
+
 		return UPGRADE_NIGHT_BURN_TIME[index];
 	}
+
 
 	private int getUpgradeLevel() {
 		for (int i = UPGRADE_THRESHOLDS.length - 1; i >= 0; i--) {
@@ -163,9 +174,12 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 
 	public void incrementSmeltCount() {
-		this.smeltCount++;
+		if (this.smeltCount < 15000) {
+			this.smeltCount++;
+		}
 		markDirty();
 	}
+
 
 
 	@Override
@@ -229,11 +243,11 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		return smeltCount;
 	}
 
-
-
 	protected boolean isBurning() {
-		return this.world != null && (this.world.isDay() || this.currentNightBurnTime > 0);
+		// Use custom logic for burning without a fuel slot, for example:
+		return this.world != null && this.world.isDay();
 	}
+
 
 	@Override
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
