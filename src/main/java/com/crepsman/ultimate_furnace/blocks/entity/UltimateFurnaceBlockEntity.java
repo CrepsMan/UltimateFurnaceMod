@@ -24,14 +24,14 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 	private final PropertyDelegate propertyDelegate;
 	private int cookTime = 0;
-	private int cookTimeTotal = 1; // Base cook time
+	private int cookTimeTotal = 300; // Base cook time
 	private int nightBurnTime = 4096; // Base burn time at night
 	private int currentNightBurnTime = 0;
 	private int smeltCount = 0;
 
 	// Upgrade thresholds
 	private static final int[] UPGRADE_THRESHOLDS = {300, 650, 1200, 5000, 15000}; // Example thresholds
-	private static final int[] UPGRADE_COOK_TIME = {1, 1, 1, 1, 1}; // Cook time for each upgrade
+	private static final int[] UPGRADE_COOK_TIME = {250, 200, 150, 75, 20}; // Cook time for each upgrade
 	private static final int[] UPGRADE_NIGHT_BURN_TIME = {6144, 7168, 8192, 10240, 13188 }; // Night burn time for each upgrade
 
 	public UltimateFurnaceBlockEntity(BlockPos pos, BlockState state) {
