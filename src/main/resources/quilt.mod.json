@@ -3,7 +3,7 @@
 	"quilt_loader": {
 		"group": "com.crepsman",
 		"id": "ultimate_furnace",
-		"version": "1.0.1",
+		"version": "1.0.11",
 		"metadata": {
 			"name": "Ultimate Furnace Mod",
 			"description": "A mod that adds an advanced furnace with solar power, and increasing speed and storage.",
