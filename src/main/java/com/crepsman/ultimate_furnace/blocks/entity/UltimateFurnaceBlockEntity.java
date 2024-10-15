@@ -90,57 +90,60 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 	public static void tick(World world, BlockPos pos, BlockState state, UltimateFurnaceBlockEntity entity) {
 		if (world.isClient) return;
 
-		UltimateFurnaceMod.LOGGER.debug("UltimateFurnaceBlockEntity: Ticking at " + pos);
-
 		boolean dirty = false;
 		boolean isDay = world.isDay();
 
-		// Handle day and night burn time logic
+		// Handle burn time logic for night
 		if (isDay) {
-			entity.currentNightBurnTime = entity.getNightBurnTime(); // Use upgraded night burn time
+			entity.currentNightBurnTime = entity.getNightBurnTime();  // Reset night burn time during the day
 		} else if (entity.currentNightBurnTime > 0) {
-			entity.currentNightBurnTime--; // Decrease night burn time at night
+			// Reduce night burn time if it's nighttime and the furnace is burning
+			int reductionRate = 2;  // Reduce night burn time slower
+			if (world.getTime() % reductionRate == 0) {
+				entity.currentNightBurnTime--;  // Decrease night burn time gradually
+			}
 		}
 
+		boolean isBurning = entity.isBurning();
 		ItemStack input = entity.getInputSlot();
-		ItemStack output = entity.inventory.get(1); // Get the output slot
+		ItemStack output = entity.inventory.get(1);  // Get the output slot
 
+		// Check if there is input and output space
 		if (!input.isEmpty() && (output.isEmpty() || output.getCount() < 64)) {
-			// Check if the furnace should be smelting
-			if (entity.isBurning()) {
+			if (isBurning) {
 				Optional<SmeltingRecipe> recipe = world.getRecipeManager().getFirstMatch(RecipeType.SMELTING, new SimpleInventory(input), world);
 				if (recipe.isPresent()) {
 					entity.cookTime++;
 					if (entity.cookTime >= entity.getCookTimeTotal()) {
 						ItemStack result = recipe.get().getOutput().copy();
 						if (entity.smeltItem(result)) {
-							entity.incrementSmeltCount(); // Increment smelt count after smelting an item
+							entity.incrementSmeltCount();  // Increment smelt count after smelting
 						}
 						entity.cookTime = 0;
 						dirty = true;
 					}
 				} else {
-					entity.cookTime = 0;
+					entity.cookTime = 0;  // Reset cook time if no valid recipe
 				}
 			} else {
-				entity.cookTime = 0; // Reset cook time if not burning
+				entity.cookTime = 0;  // Reset cook time if not burning
 			}
 		} else {
-			entity.cookTime = 0; // Reset cook time if no input or output slot is full
+			entity.cookTime = 0;  // Reset cook time if no input or output full
 		}
 
-		// Update PropertyDelegate
+		// Update cook time and burn time in property delegate
 		entity.propertyDelegate.set(2, entity.cookTime);
 		entity.propertyDelegate.set(3, entity.getCookTimeTotal());
 
-		// Determine if the block should be marked as "lit"
-		boolean isBurning = entity.isBurning() && !input.isEmpty();
+		// Update furnace "lit" state
 		if (dirty || isBurning != state.get(UltimateFurnaceBlock.LIT)) {
 			state = state.with(UltimateFurnaceBlock.LIT, isBurning);
 			world.setBlockState(pos, state, 3);
 			entity.markDirty();
 		}
 	}
+
 
 
 	private int getCookTimeTotal() {
@@ -244,9 +247,13 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 	}
 
 	protected boolean isBurning() {
-		// Use custom logic for burning without a fuel slot, for example:
-		return this.world != null && this.world.isDay();
+		if (this.world == null) {
+			return false;
+		}
+		// Furnace burns during the day or at night with remaining night burn time
+		return this.world.isDay() || this.currentNightBurnTime > 0;
 	}
+
 
 
 	@Override
