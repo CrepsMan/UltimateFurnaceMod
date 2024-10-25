@@ -9,6 +9,7 @@ import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmeltingRecipe;
@@ -16,6 +17,7 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -27,6 +29,8 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 	private int cookTimeTotal = 300; // Base cook time
 	private int nightBurnTime = 4096; // Base burn time at night
 	private int currentNightBurnTime = 0;
+	private static final int[] TOP_SLOTS = new int[]{0};
+	private static final int[] BOTTOM_SLOTS = new int[]{2};
 	private int smeltCount = 0;
 
 	// Upgrade thresholds
@@ -234,6 +238,14 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		return false;
 	}
 
+	@Override
+	public int[] getAvailableSlots(Direction side) {
+		if (side == Direction.DOWN) {
+			return BOTTOM_SLOTS;
+		} else {
+			return TOP_SLOTS ;
+		}
+	}
 
 	//returns the current smelt count
 	public int getSmeltCount(){
