@@ -54,6 +54,8 @@ public class UltimateFurnaceBlock extends AbstractFurnaceBlock {
 	}
 
 
+
+
 	protected void openScreen(World world, BlockPos pos, PlayerEntity player) {
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (blockEntity instanceof UltimateFurnaceBlockEntity) {
