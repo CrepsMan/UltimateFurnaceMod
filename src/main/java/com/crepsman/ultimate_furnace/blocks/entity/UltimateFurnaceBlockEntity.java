@@ -250,6 +250,21 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		if (this.world == null) {
 			return false;
 		}
+
+		// Check if input slot is empty
+		ItemStack input = this.inventory.get(0); // Assuming inventory[0] is the input slot
+		if (input.isEmpty()) {
+			// If there are no items in the input slot, stop burning
+			return false;
+		}
+
+		// Check if output slot is full
+		ItemStack output = this.inventory.get(2); // Assuming inventory[2] is the output slot
+		if (!output.isEmpty() && output.getCount() >= 64) {
+			// If the output slot has 64 items, stop burning
+			return false;
+		}
+
 		// Furnace burns during the day or at night with remaining night burn time
 		return this.world.isDay() || this.currentNightBurnTime > 0;
 	}

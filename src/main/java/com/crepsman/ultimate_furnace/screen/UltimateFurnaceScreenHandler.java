@@ -98,9 +98,10 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 
 			// Input slot (index 0)
 			else if (index == 0) { // Input slot
-				if (!this.insertItem(originalStack, 2, 3, false)) { // Insert into the output slot if possible
+				if (!this.insertItem(originalStack, 2, this.slots.size(), true)) { // Move to player inventory/hotbar
 					return ItemStack.EMPTY;
 				}
+				slot.onTakeItem(player, originalStack); // Notify the slot that the item was taken
 			}
 			// Player inventory/hotbar handling
 			else if (index >= 2 && index < this.slots.size()) {
@@ -110,12 +111,12 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 						return ItemStack.EMPTY;
 					}
 				} else if (index >= 2 && index < 30) {
-					// Move items from the player's inventory to the output slot
+					// Move items from the player's inventory to the hotbar
 					if (!this.insertItem(originalStack, 30, this.slots.size(), false)) {
 						return ItemStack.EMPTY;
 					}
 				} else if (index >= 30 && index < this.slots.size()) {
-					// Move items from the hotbar to the input slot
+					// Move items from the hotbar to the inventory
 					if (!this.insertItem(originalStack, 2, 30, false)) {
 						return ItemStack.EMPTY;
 					}
