@@ -101,7 +101,7 @@ public class UltimateFurnaceBlock extends AbstractFurnaceBlock {
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, RandomGenerator random) {
 		if ((Boolean)state.get(LIT)) {
 			double d = (double)pos.getX() + 0.5;
-			double e = (double)pos.getY();
+			double e = (double)pos.getY() + 0.15;
 			double f = (double)pos.getZ() + 0.5;
 			if (random.nextDouble() < 0.1) {
 				world.playSound(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
