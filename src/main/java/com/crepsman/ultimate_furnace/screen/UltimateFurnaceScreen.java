@@ -32,6 +32,7 @@ public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnace
 		if (this.handler.isBurning()) {
 			int fuelProgress = this.handler.getFuelProgress();
 			this.drawTexture(matrices, this.x + 56, this.y + 36 + 12 - fuelProgress, 176, 12 - fuelProgress, 14, fuelProgress + 1);
+			this.drawTexture(matrices, this.x + 55, this.y + 52, 176, 31, 18, 5);
 		}
 	}
 

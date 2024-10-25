@@ -65,6 +65,24 @@ public class UltimateFurnaceMod implements ModInitializer {
 						return 1;
 					}))
 			));
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+			dispatcher.register(literal("skipnight").requires(source -> source.hasPermissionLevel(2))
+				.executes(context -> {
+					long l;
+					l = context.getSource().getWorld().getTimeOfDay() + 24000L;
+					context.getSource().getWorld().setTimeOfDay(l - l % 24000L);
+					return 1;
+				}))
+		);
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+			dispatcher.register(literal("skipday").requires(source -> source.hasPermissionLevel(2))
+				.executes(context -> {
+					long l;
+					l = context.getSource().getWorld().getTimeOfDay() + 24000L;
+					context.getSource().getWorld().setTimeOfDay(l - l % 12000L);
+					return 1;
+				}))
+		);
 
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
