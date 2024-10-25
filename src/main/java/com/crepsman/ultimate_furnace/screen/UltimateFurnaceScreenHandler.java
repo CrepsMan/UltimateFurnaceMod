@@ -44,68 +44,6 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 		return customTransferStack(player, index);
 	}
 
-	// Custom transfer logic implementation
-	public ItemStack customTransferStack(PlayerEntity player, int index) {
-		ItemStack newStack = ItemStack.EMPTY;
-		Slot slot = this.slots.get(index);
-
-		if (slot != null && slot.hasStack()) {
-			ItemStack originalStack = slot.getStack();
-			newStack = originalStack.copy();
-
-			// Output slot (index 2) -> Transfer to player inventory/hotbar
-			if (index == 2) {
-				// Move items from output slot to player inventory (slots 3 to 39)
-				if (!this.insertItem(originalStack, 3, 39, true)) {
-					return ItemStack.EMPTY;
-				}
-				slot.onQuickTransfer(originalStack, newStack);
-			}
-			// Player inventory or hotbar slots -> Transfer to furnace input slot (index 0)
-			else if (index != 0) { // (Note: No need to check 'index != 1' as fuel slot is removed)
-				// Move items from player inventory/hotbar to furnace input slot (index 0)
-				if (this.isSmeltable(originalStack)) {
-					if (!this.insertItem(originalStack, 0, 1, false)) {
-						return ItemStack.EMPTY;
-					}
-				}
-				// Move items from player inventory (slots 3 to 30) to hotbar (slots 30 to 39)
-				else if (index >= 3 && index < 30) {
-					if (!this.insertItem(originalStack, 30, 39, false)) {
-						return ItemStack.EMPTY;
-					}
-				}
-				// Move items from hotbar (slots 30 to 39) to player inventory (slots 3 to 30)
-				else if (index >= 30 && index < 39) {
-					if (!this.insertItem(originalStack, 3, 30, false)) {
-						return ItemStack.EMPTY;
-					}
-				}
-			}
-			// Input slot (index 0) -> Transfer to player inventory/hotbar
-			else if (!this.insertItem(originalStack, 3, 39, false)) {
-				return ItemStack.EMPTY;
-			}
-
-			// If original stack is empty, clear the slot
-			if (originalStack.isEmpty()) {
-				slot.setStack(ItemStack.EMPTY);
-			} else {
-				slot.markDirty();
-			}
-
-			// If nothing changed in the stack, return EMPTY
-			if (originalStack.getCount() == newStack.getCount()) {
-				return ItemStack.EMPTY;
-			}
-
-			slot.onTakeItem(player, originalStack);
-		}
-
-		return newStack;
-	}
-
-
 	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
 		super(ModScreenHandlers.ULTIMATE_FURNACE_SCREEN_HANDLER, RecipeType.SMELTING, RecipeBookCategory.FURNACE, syncId, playerInventory, inventory, propertyDelegate);
 		this.customPropertyDelegate = propertyDelegate;
@@ -136,6 +74,77 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 		}
 	}
 
+	public ItemStack customTransferStack(PlayerEntity player, int index) {
+		ItemStack newStack = ItemStack.EMPTY;
+
+		// Prevent out-of-bounds access
+		if (index < 0 || index >= this.slots.size()) {
+			return ItemStack.EMPTY;
+		}
+
+		Slot slot = this.slots.get(index);
+
+		if (slot != null && slot.hasStack()) {
+			ItemStack originalStack = slot.getStack();
+			newStack = originalStack.copy();
+
+			// Output slot (index 1)
+			if (index == 1) { // Output slot
+				if (!this.insertItem(originalStack, 2, this.slots.size(), true)) {
+					return ItemStack.EMPTY;
+				}
+				slot.onTakeItem(player, originalStack); // Notify the slot that the item was taken
+			}
+
+			// Input slot (index 0)
+			else if (index == 0) { // Input slot
+				if (!this.insertItem(originalStack, 2, this.slots.size(), true)) { // Move to player inventory/hotbar
+					return ItemStack.EMPTY;
+				}
+				slot.onTakeItem(player, originalStack); // Notify the slot that the item was taken
+			}
+			// Player inventory/hotbar handling
+			else if (index >= 2 && index < this.slots.size()) {
+				// If it's smeltable, we attempt to move it to the input slot
+				if (this.isSmeltable(originalStack)) {
+					if (!this.insertItem(originalStack, 0, 1, false)) { // Input slot
+						return ItemStack.EMPTY;
+					}
+				} else if (index >= 2 && index < 30) {
+					// Move items from the player's inventory to the hotbar
+					if (!this.insertItem(originalStack, 30, this.slots.size(), false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (index >= 30 && index < this.slots.size()) {
+					// Move items from the hotbar to the inventory
+					if (!this.insertItem(originalStack, 2, 30, false)) {
+						return ItemStack.EMPTY;
+					}
+				}
+			}
+
+			// Remove the item from the slot if it's empty
+			if (originalStack.isEmpty()) {
+				slot.setStack(ItemStack.EMPTY);
+			} else {
+				slot.markDirty();
+			}
+
+			// If the item count hasn't changed, return empty
+			if (originalStack.getCount() == newStack.getCount()) {
+				return ItemStack.EMPTY;
+			}
+
+			// Notify the slot that the item was taken
+			if (index == 1) {
+				slot.onTakeItem(player, originalStack);
+			}
+		}
+
+		return newStack;
+	}
+
+
 	@Override
 	public int getCookProgress() {
 		int cookTime = this.customPropertyDelegate.get(2); // This could cause the issue if index exceeds bounds
@@ -147,7 +156,6 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 
 		return (int) ((double) cookTime / cookTimeTotal * 24); // 24 is the width of the arrow progress indicator
 	}
-
 
 	public int getFuelProgress() {
 		int burnTime = this.customPropertyDelegate.get(0);
@@ -162,8 +170,6 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 	public int getSmeltCount() {
 		return this.customPropertyDelegate.get(4);
 	}
-
-
 
 	public static class OutputSlot extends Slot {
 		public OutputSlot(Inventory inventory, int index, int x, int y) {
@@ -182,11 +188,8 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 		return false;
 	}
 
-
 	@Override
 	public boolean canUse(PlayerEntity player) {
 		return this.inventory.canPlayerUse(player);
 	}
-
-
 }
