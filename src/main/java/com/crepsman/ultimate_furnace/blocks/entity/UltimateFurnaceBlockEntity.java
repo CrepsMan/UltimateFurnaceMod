@@ -136,7 +136,7 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		entity.propertyDelegate.set(2, entity.cookTime);
 		entity.propertyDelegate.set(3, entity.getCookTimeTotal());
 
-		// Update furnace "lit" state
+		// Update furnace "lit" state based on burn status and burn time
 		if (dirty || isBurning != state.get(UltimateFurnaceBlock.LIT)) {
 			state = state.with(UltimateFurnaceBlock.LIT, isBurning);
 			world.setBlockState(pos, state, 3);
@@ -246,30 +246,15 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		return smeltCount;
 	}
 
+
 	protected boolean isBurning() {
 		if (this.world == null) {
 			return false;
 		}
 
-		// Check if input slot is empty
-		ItemStack input = this.inventory.get(0); // Assuming inventory[0] is the input slot
-		if (input.isEmpty()) {
-			// If there are no items in the input slot, stop burning
-			return false;
-		}
-
-		// Check if output slot is full
-		ItemStack output = this.inventory.get(2); // Assuming inventory[2] is the output slot
-		if (!output.isEmpty() && output.getCount() >= 64) {
-			// If the output slot has 64 items, stop burning
-			return false;
-		}
-
-		// Furnace burns during the day or at night with remaining night burn time
-		return this.world.isDay() || this.currentNightBurnTime > 0;
+		// Check if there is fuel progress
+		return this.propertyDelegate.get(0) > 0;
 	}
-
-
 
 	@Override
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
