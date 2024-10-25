@@ -21,14 +21,14 @@ public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnace
 	protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
 		super.drawBackground(matrices, delta, mouseX, mouseY);
 
-		// Correctly position and scale the cook progress arrow
-		int cookProgress = this.handler.getCookProgress();
-		if (cookProgress > 0) {
-			int progressWidth = (cookProgress * 24) / 100; // Scale the width based on cookProgress (24 is the full width of the arrow)
+		// Show cook progress arrow only when actively cooking
+		if (this.handler.isBurning() && this.handler.getCookProgress() > 0) {
+			int cookProgress = this.handler.getCookProgress();
+			int progressWidth = (cookProgress * 24) / 100; // Scale the width based on cookProgress
 			this.drawTexture(matrices, this.x + 79, this.y + 34, 176, 14, progressWidth + 1, 16);
 		}
 
-		// Correctly position and scale the fire icon
+		// Show fire icon only when furnace meets new isBurning conditions
 		if (this.handler.isBurning()) {
 			int fuelProgress = this.handler.getFuelProgress();
 			this.drawTexture(matrices, this.x + 56, this.y + 36 + 12 - fuelProgress, 176, 12 - fuelProgress, 14, fuelProgress + 1);
@@ -48,6 +48,4 @@ public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnace
 		// Draw the smelt count slightly higher to avoid overlapping with inventory text
 		this.textRenderer.draw(matrices, smeltCountText, 8, this.backgroundHeight - 104, 4210752); // Adjusted position
 	}
-
-
 }
