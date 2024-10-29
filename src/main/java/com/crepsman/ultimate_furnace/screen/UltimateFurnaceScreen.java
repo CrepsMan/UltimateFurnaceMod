@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractFurnaceScreen;
 import net.minecraft.client.gui.screen.recipebook.FurnaceRecipeBookScreen;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
@@ -13,6 +14,7 @@ import net.minecraft.util.Identifier;
 public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnaceScreenHandler> {
 	private static final Identifier TEXTURE = Identifier.tryParse(UltimateFurnaceMod.MOD_ID, "textures/gui/container/ultimate_furnace.png");
 	private static final int[] UPGRADE_THRESHOLDS = {100, 500, 1000, 5000, 10000, 15000};
+	private int background;
 
 	public UltimateFurnaceScreen(UltimateFurnaceScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, new FurnaceRecipeBookScreen(), inventory, title, TEXTURE);
@@ -20,7 +22,9 @@ public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnace
 
 	@Override
 	protected void drawBackground(MatrixStack matrices, DrawContext context, float delta, int mouseX, int mouseY) {
-		super.drawBackground(matrices, delta, mouseX, mouseY);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, this.background);
 
 		// Draw the XP bar fill, scaled to the smelt progress percentage within the level
 		int smeltCount = this.handler.getSmeltCount();

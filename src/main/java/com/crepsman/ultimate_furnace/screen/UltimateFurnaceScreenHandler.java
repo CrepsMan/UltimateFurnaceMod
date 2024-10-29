@@ -10,13 +10,22 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractFurnaceScreenHandler;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.slot.FurnaceFuelSlot;
+import net.minecraft.screen.slot.FurnaceOutputSlot;
 import net.minecraft.screen.slot.Slot;
 
 public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 	private final PropertyDelegate customPropertyDelegate;
 	private final Inventory inventory;
 	private static final int[] UPGRADE_THRESHOLDS = {100, 500, 1000, 5000, 10000, 15000};
-
+	public static final int INGREDIENT_SLOT = 0;
+	public static final int RESULT_SLOT = 2;
+	public static final int SLOTS_COUNT = 3;
+	public static final int PROPERTIES_COUNT = 4;
+	private static final int INVENTORY_SLOTS_START = 3;
+	private static final int INVENTORY_SLOTS_END = 30;
+	private static final int HOTBAR_SLOTS_START = 30;
+	private static final int HOTBAR_SLOTS_END = 39;
 
 	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory) {
 		this(syncId, playerInventory, new SimpleInventory(3), new PropertyDelegate() {
@@ -41,7 +50,7 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 
 	// Override transferSlot to use custom logic
 	@Override
-	public ItemStack quickMove(PlayerEntity player, int index) {
+	public ItemStack quickTransfer(PlayerEntity player, int index) {
 		// Call custom transfer logic here
 		return customTransferStack(player, index);
 	}
@@ -53,103 +62,70 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 		this.slots.clear();
 		this.inventory = inventory;
 
-		// Add the input slot
-		this.addSlot(new Slot(inventory, 0, 56, 17)); // Input slot
+		// Add the slots
+		this.addSlot(new Slot(inventory, 0, 56, 17));
+		this.addSlot(new FurnaceOutputSlot(playerInventory.player, inventory, 2, 116, 35));
 
-		// Add the output slot
-		this.addSlot(new OutputSlot(inventory, 2, 116, 35)); // Output slot
-
-		int playerInventoryStartX = 8;
-		int playerInventoryStartY = 84;
-		int hotbarStartY = 142;
-
-		// Add player inventory slots
-		for (int row = 0; row < 3; row++) {
-			for (int col = 0; col < 9; col++) {
-				this.addSlot(new Slot(playerInventory, col + row * 9 + 9, playerInventoryStartX + col * 18, playerInventoryStartY + row * 18));
+		int i;
+		for(i = 0; i < 3; ++i) {
+			for(int j = 0; j < 9; ++j) {
+				this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
-		// Add player hotbar slots
-		for (int col = 0; col < 9; col++) {
-			this.addSlot(new Slot(playerInventory, col, playerInventoryStartX + col * 18, hotbarStartY));
+		for(i = 0; i < 9; ++i) {
+			this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 		}
+
+		this.addProperties(propertyDelegate);
 	}
 
-	public ItemStack customTransferStack(PlayerEntity player, int index) {
-		ItemStack newStack = ItemStack.EMPTY;
-
-		// Prevent out-of-bounds access
-		if (index < 0 || index >= this.slots.size()) {
-			return ItemStack.EMPTY;
-		}
-
-		Slot slot = this.slots.get(index);
-
+	public ItemStack customTransferStack(PlayerEntity player, int fromIndex) {
+		ItemStack itemStack = ItemStack.EMPTY;
+		Slot slot = (Slot)this.slots.get(fromIndex);
 		if (slot != null && slot.hasStack()) {
-			ItemStack originalStack = slot.getStack();
-			newStack = originalStack.copy();
-
-			// Output slot (index 1)
-			if (index == 1) { // Output slot
-				if (!this.insertItem(originalStack, 2, this.slots.size(), true)) {
+			ItemStack itemStack2 = slot.getStack();
+			itemStack = itemStack2.copy();
+			if (fromIndex == 2) {
+				if (!this.insertItem(itemStack2, 3, 39, true)) {
 					return ItemStack.EMPTY;
 				}
-				slot.onTakeItem(player, originalStack); // Notify the slot that the item was taken
-			}
 
-			// Input slot (index 0)
-			else if (index == 0) { // Input slot
-				if (!this.insertItem(originalStack, 2, this.slots.size(), true)) { // Move to player inventory/hotbar
+				slot.onQuickTransfer(itemStack2, itemStack);
+			} else if (fromIndex != 1 && fromIndex != 0) {
+				if (this.isSmeltable(itemStack2)) {
+					if (!this.insertItem(itemStack2, 0, 1, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (fromIndex >= 3 && fromIndex < 30) {
+					if (!this.insertItem(itemStack2, 30, 39, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (fromIndex >= 30 && fromIndex < 39 && !this.insertItem(itemStack2, 3, 30, false)) {
 					return ItemStack.EMPTY;
 				}
-				slot.onTakeItem(player, originalStack); // Notify the slot that the item was taken
-			}
-			// Player inventory/hotbar handling
-			else if (index >= 2 && index < this.slots.size()) {
-				// If it's smeltable, we attempt to move it to the input slot
-				if (this.isSmeltable(originalStack)) {
-					if (!this.insertItem(originalStack, 0, 1, false)) { // Input slot
-						return ItemStack.EMPTY;
-					}
-				} else if (index >= 2 && index < 30) {
-					// Move items from the player's inventory to the hotbar
-					if (!this.insertItem(originalStack, 30, this.slots.size(), false)) {
-						return ItemStack.EMPTY;
-					}
-				} else if (index >= 30 && index < this.slots.size()) {
-					// Move items from the hotbar to the inventory
-					if (!this.insertItem(originalStack, 2, 30, false)) {
-						return ItemStack.EMPTY;
-					}
-				}
+			} else if (!this.insertItem(itemStack2, 3, 39, false)) {
+				return ItemStack.EMPTY;
 			}
 
-			// Remove the item from the slot if it's empty
-			if (originalStack.isEmpty()) {
+			if (itemStack2.isEmpty()) {
 				slot.setStack(ItemStack.EMPTY);
 			} else {
 				slot.markDirty();
 			}
 
-			// If the item count hasn't changed, return empty
-			if (originalStack.getCount() == newStack.getCount()) {
+			if (itemStack2.getCount() == itemStack.getCount()) {
 				return ItemStack.EMPTY;
 			}
 
-			// Notify the slot that the item was taken
-			if (index == 1) {
-				slot.onTakeItem(player, originalStack);
-			}
+			slot.onTakeItem(player, itemStack2);
 		}
 
-		return newStack;
+		return itemStack;
 	}
 
-
-
 	@Override
-	public float getCookProgress() {
+	public int getCookProgress() {
 		int cookTime = this.customPropertyDelegate.get(2); // This could cause the issue if index exceeds bounds
 		int cookTimeTotal = this.customPropertyDelegate.get(3);
 
@@ -160,7 +136,7 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 		return (float) ((double) cookTime / cookTimeTotal * 24); // 24 is the width of the arrow progress indicator
 	}
 
-	public float getFuelProgress() {
+	public int getFuelProgress() {
 		int burnTime = this.customPropertyDelegate.get(0);
 		int currentBurnTime = this.customPropertyDelegate.get(1);
 		return currentBurnTime != 0 && burnTime != 0 ? burnTime * 13 / currentBurnTime : 0;
