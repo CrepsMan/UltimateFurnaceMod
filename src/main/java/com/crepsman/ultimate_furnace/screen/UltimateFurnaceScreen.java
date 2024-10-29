@@ -2,6 +2,7 @@ package com.crepsman.ultimate_furnace.screen;
 
 import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractFurnaceScreen;
 import net.minecraft.client.gui.screen.recipebook.FurnaceRecipeBookScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -10,7 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnaceScreenHandler> {
-	private static final Identifier TEXTURE = new Identifier(UltimateFurnaceMod.MOD_ID, "textures/gui/container/ultimate_furnace.png");
+	private static final Identifier TEXTURE = Identifier.tryParse(UltimateFurnaceMod.MOD_ID, "textures/gui/container/ultimate_furnace.png");
 	private static final int[] UPGRADE_THRESHOLDS = {100, 500, 1000, 5000, 10000, 15000};
 
 	public UltimateFurnaceScreen(UltimateFurnaceScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -18,7 +19,7 @@ public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnace
 	}
 
 	@Override
-	protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
+	protected void drawBackground(MatrixStack matrices, DrawContext context, float delta, int mouseX, int mouseY) {
 		super.drawBackground(matrices, delta, mouseX, mouseY);
 
 		// Draw the XP bar fill, scaled to the smelt progress percentage within the level
@@ -37,12 +38,12 @@ public class UltimateFurnaceScreen extends AbstractFurnaceScreen<UltimateFurnace
 
 			// Set default shader color and draw XP bar
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			this.drawTexture(matrices, this.x + 7, this.y + 65, 0, 176, barWidth, 5);
+			context.drawTexture(matrices, this.x + 7, this.y + 65, 0, 176, barWidth, 5);
 		}
 	}
 
 	@Override
-	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
+	protected void drawForeground(MatrixStack matrices,DrawContext context, int mouseX, int mouseY) {
 		super.drawForeground(matrices, mouseX, mouseY);
 
 		// Get the smelt count from the handler

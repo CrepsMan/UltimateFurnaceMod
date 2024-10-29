@@ -41,7 +41,7 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 
 	// Override transferSlot to use custom logic
 	@Override
-	public ItemStack quickTransfer(PlayerEntity player, int index) {
+	public ItemStack quickMove(PlayerEntity player, int index) {
 		// Call custom transfer logic here
 		return customTransferStack(player, index);
 	}
@@ -147,8 +147,9 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 	}
 
 
+
 	@Override
-	public int getCookProgress() {
+	public float getCookProgress() {
 		int cookTime = this.customPropertyDelegate.get(2); // This could cause the issue if index exceeds bounds
 		int cookTimeTotal = this.customPropertyDelegate.get(3);
 
@@ -156,10 +157,10 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 			cookTimeTotal = 1; // Avoid division by zero
 		}
 
-		return (int) ((double) cookTime / cookTimeTotal * 24); // 24 is the width of the arrow progress indicator
+		return (float) ((double) cookTime / cookTimeTotal * 24); // 24 is the width of the arrow progress indicator
 	}
 
-	public int getFuelProgress() {
+	public float getFuelProgress() {
 		int burnTime = this.customPropertyDelegate.get(0);
 		int currentBurnTime = this.customPropertyDelegate.get(1);
 		return currentBurnTime != 0 && burnTime != 0 ? burnTime * 13 / currentBurnTime : 0;
