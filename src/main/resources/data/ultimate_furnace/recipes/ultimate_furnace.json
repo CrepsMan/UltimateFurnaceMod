@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RDR",
+    "RFR",
+    "CCC"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "D": {
+      "item": "minecraft:daylight_detector"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "C": {
+      "item": "minecraft:copper_block"
+    }
+  },
+  "result": {
+    "item": "ultimate_furnace:ultimate_furnace",
+    "count": 1
+  }
+}
