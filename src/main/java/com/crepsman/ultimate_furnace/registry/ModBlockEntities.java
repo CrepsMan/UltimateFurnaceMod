@@ -1,21 +1,22 @@
-package com.crepsman.ultimate_furnace.registry;
+package com.CrepsMan.ultimate_furnace.registry;
 
-import com.crepsman.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntity;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import com.CrepsMan.ultimate_furnace.blocks.entity.UltimateFurnaceBlockEntityGum;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
+import net.minecraft.util.registry.Registry;
+import com.CrepsMan.ultimate_furnace.UltimateFurnaceMod;
+import org.quiltmc.qsl.block.entity.api.QuiltBlockEntityTypeBuilder;
 
 public class ModBlockEntities {
-	public static final BlockEntityType<UltimateFurnaceBlockEntity> ULTIMATE_FURNACE_BLOCK_ENTITY =
+	public static final BlockEntityType<UltimateFurnaceBlockEntityGum> ULTIMATE_FURNACE_BLOCK_ENTITY_GUM =
 		Registry.register(
-			RegistryKeys.BLOCK_ENTITY_TYPE,
-			Identifier.tryParse(UltimateFurnaceMod.MOD_ID, "ultimate_furnace"),
-				FabricBlockEntityTypeBuilder.create(UltimateFurnaceBlockEntity::new, ModBlocks.ULTIMATE_FURNACE).build(null)
+			Registry.BLOCK_ENTITY_TYPE,
+			new Identifier(UltimateFurnaceMod.MOD_ID, "ultimate_furnace_gum"),
+			QuiltBlockEntityTypeBuilder.create(UltimateFurnaceBlockEntityGum::new, ModBlocks.ULTIMATE_FURNACE_GUM).build(null)
 		);
 
 	public static void registerBlockEntities() {
+		UltimateFurnaceMod.LOGGER.info("Registering block entities for " + UltimateFurnaceMod.MOD_ID);
+		UltimateFurnaceMod.LOGGER.debug("UltimateFurnaceBlockEntity registered with ID: ultimate_furnace_gum");
 	}
 }

@@ -1,4 +1,4 @@
-package com.crepsman.ultimate_furnace.util;
+package com.CrepsMan.ultimate_furnace.util;
 
 import net.minecraft.state.property.BooleanProperty;
 
