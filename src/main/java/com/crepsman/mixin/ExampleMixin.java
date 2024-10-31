@@ -1,4 +1,4 @@
-package com.mrgummy.mixin;
+package com.crepsman.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

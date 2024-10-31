@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
-	"id": "UltimateFurnaceMod-mod",
-	"version": "${version}",
+	"id": "UltimateFurnace-Mod",
+	"version": "1.0",
 	"name": "Ultimate Furnace",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.crepsman.TemplateMod"
+			"com.crepsman.UltimateFurnaceMod"
 		]
 	},
 	"mixins": [

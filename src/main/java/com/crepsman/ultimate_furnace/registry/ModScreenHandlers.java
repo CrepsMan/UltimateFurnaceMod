@@ -2,8 +2,8 @@ package com.crepsman.ultimate_furnace.registry;
 
 import com.crepsman.ultimate_furnace.screen.UltimateFurnaceScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import com.crepsman.ultimate_furnace.UltimateFurnaceMod;
 
 public class ModScreenHandlers {
@@ -16,6 +16,6 @@ public class ModScreenHandlers {
 		);
 
 	public static void registerScreenHandlers() {
-
+		// Register screen handlers here
 	}
 }
