@@ -118,14 +118,16 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		// Check if there is input and output space
 		if (!input.isEmpty() && (output.isEmpty() || output.getCount() < 64)) {
 			if (isBurning) {
-				Optional<SmeltingRecipe> recipe = RecipeManager.createCachedMatchGetter(RecipeType.SMELTING)
-					.getFirstMatch(new SimpleInventory(input), world)
-					.orElse(null);
+				// Create a SimpleInventory with the input item for recipe matching
+				SimpleInventory inventory = new SimpleInventory(input);
+
+				Optional<SmeltingRecipe> recipe = world.getRecipeManager().getFirstMatch(
+					RecipeType.SMELTING, inventory, world);
 
 				if (recipe.isPresent()) {
 					entity.cookTime++;
 					if (entity.cookTime >= entity.getCookTimeTotal()) {
-						ItemStack result = recipe.get().getResult().copy();
+						ItemStack result = recipe.get().getResult(world.getRegistryManager()).copy();
 						if (entity.smeltItem(result)) {
 							entity.incrementSmeltCount();  // Increment smelt count after smelting
 						}
@@ -135,7 +137,9 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 				} else {
 					entity.cookTime = 0;  // Reset cook time if no valid recipe
 				}
-			} else {
+			}
+
+			else {
 				entity.cookTime = 0;  // Reset cook time if not burning
 			}
 		} else {

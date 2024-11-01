@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
@@ -28,11 +29,7 @@ public class ModBlocks {
 
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
-		return Registry.register(
-				RegistryKeys.BLOCK,
-				Identifier.tryParse(UltimateFurnaceMod.MOD_ID, name),
-				block
-		);
+		Registry.register(Registries.BLOCK, Identifier.tryParse("modid:block_name"), blockInstance);
 	}
 
 	private static Item registerBlockItem(String name, Block block) {
