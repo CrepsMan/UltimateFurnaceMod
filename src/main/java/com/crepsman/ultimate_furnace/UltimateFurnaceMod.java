@@ -6,15 +6,11 @@ import com.crepsman.ultimate_furnace.registry.ModBlocks;
 import com.crepsman.ultimate_furnace.registry.ModScreenHandlers;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.block.Block;
 import net.minecraft.command.argument.BlockPosArgumentType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
-import org.quiltmc.qsl.item.group.api.QuiltItemGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +38,9 @@ public class UltimateFurnaceMod implements ModInitializer {
 							if (block == ModBlocks.ULTIMATE_FURNACE) {
 								UltimateFurnaceBlockEntity entity = context.getSource().getWorld().getBlockEntity(pos, ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY).get();
 								entity.setSmeltCount(set);
-								context.getSource().sendFeedback(Text.translatable("commands.ultimate_furnace.ultimate_furnace.set", entity.getSmeltCount()), true);
+								context.getSource().sendFeedback(() -> Text.translatable("commands.ultimate_furnace.ultimate_furnace.set", entity.getSmeltCount()), true);
 							} else {
-								context.getSource().sendFeedback(Text.translatable("commands.ultimate_furnace.ultimate_furnace.fail"), false);
+								context.getSource().sendFeedback(() -> Text.translatable("commands.ultimate_furnace.ultimate_furnace.fail"), false);
 							}
 							return 1;
 						})))
@@ -58,9 +54,9 @@ public class UltimateFurnaceMod implements ModInitializer {
 						Block block = context.getSource().getWorld().getBlockState(pos).getBlock();
 						if (block == ModBlocks.ULTIMATE_FURNACE) {
 							UltimateFurnaceBlockEntity entity = context.getSource().getWorld().getBlockEntity(pos, ModBlockEntities.ULTIMATE_FURNACE_BLOCK_ENTITY).get();
-							context.getSource().sendFeedback(Text.translatable("commands.ultimate_furnace.ultimate_furnace.get", entity.getSmeltCount()), true);
+							context.getSource().sendFeedback(() -> Text.translatable("commands.ultimate_furnace.ultimate_furnace.get", entity.getSmeltCount()), true);
 						} else {
-							context.getSource().sendFeedback(Text.translatable("commands.ultimate_furnace.ultimate_furnace.fail"), false);
+							context.getSource().sendFeedback(() -> Text.translatable("commands.ultimate_furnace.ultimate_furnace.fail"), false);
 						}
 						return 1;
 					}))
@@ -89,7 +85,4 @@ public class UltimateFurnaceMod implements ModInitializer {
 		ModScreenHandlers.registerScreenHandlers();
 	}
 
-	public static void addItemsToItemGroup(QuiltItemGroup entries) {
-		entries.appendStacks(DefaultedList.ofSize(1, new ItemStack(ModBlocks.ULTIMATE_FURNACE)));
-	}
 }

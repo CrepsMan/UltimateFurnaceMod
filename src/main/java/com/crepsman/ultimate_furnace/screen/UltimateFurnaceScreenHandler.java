@@ -21,13 +21,13 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 			private final int[] data = new int[5];
 
 			@Override
-			public int get(int index) {
-				return data[index];
+			public int get(int fromIndex) {
+				return data[fromIndex];
 			}
 
 			@Override
-			public void set(int index, int value) {
-				data[index] = value;
+			public void set(int fromIndex, int value) {
+				data[fromIndex] = value;
 			}
 
 			@Override
@@ -38,10 +38,9 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 	}
 
 	// Override transferSlot to use custom logic
-	@Override
-	public ItemStack quickTransfer(PlayerEntity player, int index) {
+	public ItemStack quickTransfer(PlayerEntity player, int fromIndex) {
 		// Call custom transfer logic here
-		return customTransferStack(player, index);
+		return customTransferStack(player, fromIndex);
 	}
 
 	public UltimateFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -74,48 +73,48 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 		}
 	}
 
-	public ItemStack customTransferStack(PlayerEntity player, int index) {
+	public ItemStack customTransferStack(PlayerEntity player, int fromIndex) {
 		ItemStack newStack = ItemStack.EMPTY;
 
 		// Prevent out-of-bounds access
-		if (index < 0 || index >= this.slots.size()) {
+		if (fromIndex < 0 || fromIndex >= this.slots.size()) {
 			return ItemStack.EMPTY;
 		}
 
-		Slot slot = this.slots.get(index);
+		Slot slot = this.slots.get(fromIndex);
 
 		if (slot != null && slot.hasStack()) {
 			ItemStack originalStack = slot.getStack();
 			newStack = originalStack.copy();
 
-			// Output slot (index 1)
-			if (index == 1) { // Output slot
+			// Output slot (fromIndex 1)
+			if (fromIndex == 1) { // Output slot
 				if (!this.insertItem(originalStack, 2, this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
 				slot.onTakeItem(player, originalStack); // Notify the slot that the item was taken
 			}
 
-			// Input slot (index 0)
-			else if (index == 0) { // Input slot
+			// Input slot (fromIndex 0)
+			else if (fromIndex == 0) { // Input slot
 				if (!this.insertItem(originalStack, 2, this.slots.size(), true)) { // Move to player inventory/hotbar
 					return ItemStack.EMPTY;
 				}
 				slot.onTakeItem(player, originalStack); // Notify the slot that the item was taken
 			}
 			// Player inventory/hotbar handling
-			else if (index >= 2 && index < this.slots.size()) {
+			else if (fromIndex >= 2 && fromIndex < this.slots.size()) {
 				// If it's smeltable, we attempt to move it to the input slot
 				if (this.isSmeltable(originalStack)) {
 					if (!this.insertItem(originalStack, 0, 1, false)) { // Input slot
 						return ItemStack.EMPTY;
 					}
-				} else if (index >= 2 && index < 30) {
+				} else if (fromIndex >= 2 && fromIndex < 30) {
 					// Move items from the player's inventory to the hotbar
 					if (!this.insertItem(originalStack, 30, this.slots.size(), false)) {
 						return ItemStack.EMPTY;
 					}
-				} else if (index >= 30 && index < this.slots.size()) {
+				} else if (fromIndex >= 30 && fromIndex < this.slots.size()) {
 					// Move items from the hotbar to the inventory
 					if (!this.insertItem(originalStack, 2, 30, false)) {
 						return ItemStack.EMPTY;
@@ -136,7 +135,7 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 			}
 
 			// Notify the slot that the item was taken
-			if (index == 1) {
+			if (fromIndex == 1) {
 				slot.onTakeItem(player, originalStack);
 			}
 		}
@@ -146,8 +145,8 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 
 
 	@Override
-	public int getCookProgress() {
-		int cookTime = this.customPropertyDelegate.get(2); // This could cause the issue if index exceeds bounds
+	public float getCookProgress() {
+		int cookTime = this.customPropertyDelegate.get(2); // This could cause the issue if fromIndex exceeds bounds
 		int cookTimeTotal = this.customPropertyDelegate.get(3);
 
 		if (cookTimeTotal == 0) {
@@ -157,7 +156,7 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 		return (int) ((double) cookTime / cookTimeTotal * 24); // 24 is the width of the arrow progress indicator
 	}
 
-	public int getFuelProgress() {
+	public float getFuelProgress() {
 		int burnTime = this.customPropertyDelegate.get(0);
 		int currentBurnTime = this.customPropertyDelegate.get(1);
 		return currentBurnTime != 0 && burnTime != 0 ? burnTime * 13 / currentBurnTime : 0;
@@ -172,8 +171,8 @@ public class UltimateFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 	}
 
 	public static class OutputSlot extends Slot {
-		public OutputSlot(Inventory inventory, int index, int x, int y) {
-			super(inventory, index, x, y);
+		public OutputSlot(Inventory inventory, int fromIndex, int x, int y) {
+			super(inventory, fromIndex, x, y);
 		}
 
 		@Override

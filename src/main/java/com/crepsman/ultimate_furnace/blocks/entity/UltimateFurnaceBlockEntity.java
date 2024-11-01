@@ -11,8 +11,11 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmeltingRecipe;
+import net.minecraft.recipe.input.SingleStackRecipeInput;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
@@ -115,11 +118,14 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 		// Check if there is input and output space
 		if (!input.isEmpty() && (output.isEmpty() || output.getCount() < 64)) {
 			if (isBurning) {
-				Optional<SmeltingRecipe> recipe = world.getRecipeManager().getFirstMatch(RecipeType.SMELTING, new SimpleInventory(input), world);
+				Optional<SmeltingRecipe> recipe = RecipeManager.createCachedMatchGetter(RecipeType.SMELTING)
+					.getFirstMatch(new SimpleInventory(input), world)
+					.orElse(null);
+
 				if (recipe.isPresent()) {
 					entity.cookTime++;
 					if (entity.cookTime >= entity.getCookTimeTotal()) {
-						ItemStack result = recipe.get().getOutput().copy();
+						ItemStack result = recipe.get().getResult().copy();
 						if (entity.smeltItem(result)) {
 							entity.incrementSmeltCount();  // Increment smelt count after smelting
 						}
@@ -190,15 +196,15 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
 
 	@Override
-	public void writeNbt(NbtCompound nbt) {
-		super.writeNbt(nbt);
+	public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+		super.writeNbt(nbt, registryLookup);
 		nbt.putInt("SmeltCount", this.smeltCount);
 
 	}
 
 	@Override
-	public void readNbt(NbtCompound nbt) {
-		super.readNbt(nbt);
+	public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+		super.readNbt(nbt,registryLookup);
 		this.smeltCount = nbt.getInt("SmeltCount");
 	}
 
@@ -220,7 +226,7 @@ public class UltimateFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 			this.inventory.set(2, output.copy());
 			this.inventory.get(0).decrement(1); // Decrease input stack since the smelting is successful
 			return true;
-		} else if (resultStack.isItemEqual(output)) {
+		} else if (resultStack.isOf(output.getItem())) {
 			int newCount = resultStack.getCount() + output.getCount();
 
 			if (newCount <= 64) {
